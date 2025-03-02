@@ -38,7 +38,7 @@
 			datasourceTemplate: "github-releases",
 			matchStrings: [
 				// test: https://regex101.com/r/8grHta
-				"^['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]",
+				"(?:^|\r\n|\r|\n|$)['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]",
 			],
 		},
 		// renovate does not support backends
