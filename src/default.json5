@@ -34,8 +34,9 @@
 			customType: "regex",
 			description: "Updates mise tools (shorthands)",
 			fileMatch: ["(^|/)\\.?mise\\.toml$", "(^|/)\\.?mise/config\\.toml$"],
-			// if not set or set to undefined, Renovate does not update the version
-			datasourceTemplate: "github-releases",
+			// to avoid renovate config validator error
+			// Renovate throws "Missing datasource!" warnings but still works
+			datasourceTemplate: "undefined",
 			matchStrings: [
 				// test: https://regex101.com/r/8grHta
 				"^['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]",
@@ -120,18 +121,21 @@
 		{
 			matchManagers: ["custom.regex"],
 			matchDepNames: ["taplo"],
+			overrideDatasource: "github-releases",
 			// cspell:ignore tamasfe
 			overridePackageName: "tamasfe/taplo",
 		},
 		{
 			matchManagers: ["custom.regex"],
 			matchDepNames: ["biome"],
+			overrideDatasource: "github-releases",
 			overridePackageName: "biomejs/biome",
 			extractVersion: "^cli/v(?<version>.+)",
 		},
 		{
 			matchManagers: ["custom.regex"],
 			matchDepNames: ["lychee"],
+			overrideDatasource: "github-releases",
 			// cspell:ignore lycheeverse
 			overridePackageName: "lycheeverse/lychee",
 			extractVersion: "^lychee-v(?<version>.+)",

@@ -30,7 +30,7 @@
 				"(^|/)\\.?mise\\.toml$",
 				"(^|/)\\.?mise/config\\.toml$"
 			],
-			"datasourceTemplate": "github-releases",
+			"datasourceTemplate": "undefined",
 			"matchStrings": [
 				"^['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]"
 			]
@@ -131,6 +131,7 @@
 			"matchDepNames": [
 				"taplo"
 			],
+			"overrideDatasource": "github-releases",
 			"overridePackageName": "tamasfe/taplo"
 		},
 		{
@@ -140,6 +141,7 @@
 			"matchDepNames": [
 				"biome"
 			],
+			"overrideDatasource": "github-releases",
 			"overridePackageName": "biomejs/biome",
 			"extractVersion": "^cli/v(?<version>.+)"
 		},
@@ -150,6 +152,7 @@
 			"matchDepNames": [
 				"lychee"
 			],
+			"overrideDatasource": "github-releases",
 			"overridePackageName": "lycheeverse/lychee",
 			"extractVersion": "^lychee-v(?<version>.+)"
 		}
