@@ -117,7 +117,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"regex"
 			],
 			"matchDepNames": [
 				"cargo-binstall"
@@ -126,7 +126,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"regex"
 			],
 			"matchDepNames": [
 				"taplo"
@@ -136,7 +136,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"regex"
 			],
 			"matchDepNames": [
 				"biome"
@@ -147,7 +147,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"regex"
 			],
 			"matchDepNames": [
 				"lychee"
