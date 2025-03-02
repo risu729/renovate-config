@@ -112,25 +112,25 @@
 		},
 		// mise tools
 		{
-			matchManagers: ["custom.regex"],
+			matchManagers: ["regex"],
 			// cspell:ignore binstall
 			matchDepNames: ["cargo-binstall"],
 			overrideDatasource: "crate",
 		},
 		{
-			matchManagers: ["custom.regex"],
+			matchManagers: ["regex"],
 			matchDepNames: ["taplo"],
 			// cspell:ignore tamasfe
 			overridePackageName: "tamasfe/taplo",
 		},
 		{
-			matchManagers: ["custom.regex"],
+			matchManagers: ["regex"],
 			matchDepNames: ["biome"],
 			overridePackageName: "biomejs/biome",
 			extractVersion: "^cli/v(?<version>.+)",
 		},
 		{
-			matchManagers: ["custom.regex"],
+			matchManagers: ["regex"],
 			matchDepNames: ["lychee"],
 			// cspell:ignore lycheeverse
 			overridePackageName: "lycheeverse/lychee",
