@@ -32,7 +32,7 @@
 			],
 			"datasourceTemplate": "github-releases",
 			"matchStrings": [
-				"^['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]"
+				"(?:^|\r\n|\r|\n|$)['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]"
 			]
 		},
 		{
