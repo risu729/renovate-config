@@ -24,7 +24,7 @@ lychee = "0.18.1"
 typos = "1.31.1"
 "npm:ignore-sync" = "8.0.0"
 "npm:json5" = "2.2.3"
-"npm:jschema-validator" = "1.0.12"
+"npm:jschema-validator" = "1.0.13"
 
 [settings]
 experimental = true
