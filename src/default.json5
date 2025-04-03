@@ -42,22 +42,6 @@
 				"(?:^|\r\n|\r|\n|$)['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]",
 			],
 		},
-		// renovate does not support backends
-		// ref: https://github.com/renovatebot/renovate/issues/30387
-		{
-			customType: "regex",
-			description: "Updates mise tools (full)",
-			fileMatch: ["(^|/)\\.?mise\\.toml$", "(^|/)\\.?mise/config\\.toml$"],
-			// supports only cargo, npm, ubi, and aqua backends
-			datasourceTemplate: "{{#if (equals datasource 'cargo')}}crate{{else}}\
-{{#if (or (equals datasource 'ubi') (equals datasource 'aqua'))}}github-releases{{else}}{{datasource}}{{/if}}{{/if}}",
-			currentValueTemplate: "{{{replace '^v(.+)$' '$1' currentValue}}}",
-			extractVersionTemplate: "^v?(?<version>.+)",
-			matchStrings: [
-				// test: https://regex101.com/r/K6Imdx
-				"['\"](?<datasource>.+?):(?<depName>.+?)['\"] *= *['\"][^\\d.]*(?<currentValue>.+?)['\"]",
-			],
-		},
 		{
 			customType: "regex",
 			description: "Updates min_version in mise config",
