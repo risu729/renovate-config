@@ -1,4 +1,4 @@
-// ref: https://cspell.org/configuration/
+// ref: https://cspell.org/docs/Configuration
 
 "use strict";
 
@@ -28,7 +28,7 @@ module.exports = {
 		"ghalint",
 		"pinact",
 		"commitlint",
-		"graphviz",
+		"jschema",
 		"buni",
 	],
 };

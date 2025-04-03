@@ -1,1 +1,160 @@
-{"$schema":"https://docs.renovatebot.com/renovate-schema.json","extends":["config:best-practices",":pinVersions",":automergeMinor",":automergeDigest",":prHourlyLimitNone",":prConcurrentLimitNone","customManagers:biomeVersions"],"labels":["dependencies","{{#unless (equals manager 'regex')}}{{manager}}{{/unless}}"],"customManagers":[{"customType":"regex","description":"Updates tool versions in mise.toml (default registry)","fileMatch":["(^|/)\\.?mise\\.toml$","(^|/)\\.?mise/config\\.toml$"],"datasourceTemplate":"{{#unless datasource}}github-releases{{else}}{{datasource}}{{/unless}}","matchStrings":["# renovate:(?: datasource=(?<datasource>.+?))?(?: packageName=(?<packageName>.+?))?(?: versioning=(?<versioning>.+?))?(?: extractVersion=(?<extractVersion>.+?))?\\n\"?(?<depName>[^:]+?)\"? *= *\"(?<currentValue>.+?)\""]},{"customType":"regex","description":"Updates min_version in mise config","fileMatch":["(^|/)\\.?mise\\.toml$","(^|/)\\.?mise/config\\.toml$"],"datasourceTemplate":"github-releases","depNameTemplate":"mise","packageNameTemplate":"jdx/mise","matchStrings":["min_version = \"(?<currentValue>.+)\""]},{"customType":"regex","description":"Updates mise versions in GitHub Actions","fileMatch":["^\\.github/workflows/.+\\.yml$"],"datasourceTemplate":"github-releases","depNameTemplate":"mise","packageNameTemplate":"jdx/mise","matchStrings":["version: (?<currentValue>.+)"]},{"customType":"regex","fileMatch":["^\\.github/renovate\\.json5$"],"matchStrings":["github>risu729/renovate-config#(?<currentValue>[0-9.]+)"],"datasourceTemplate":"github-releases","depNameTemplate":"risu729/renovate-config"}],"packageRules":[{"matchDepNames":["node"],"ignoreUnstable":false},{"matchDepNames":["mise"],"automerge":true},{"matchCategories":["ci"],"semanticCommitType":"ci"},{"matchFileNames":["mise.toml"],"addLabels":["mise"]}]}
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"config:best-practices",
+		":pinVersions",
+		":automergeMinor",
+		":automergeDigest",
+		":prHourlyLimitNone",
+		":prConcurrentLimitNone",
+		"customManagers:biomeVersions"
+	],
+	"ignorePresets": [
+		":ignoreModulesAndTests"
+	],
+	"bun": {
+		"ignorePaths": [
+			"**/node_modules/**",
+			"**/bun.lockb"
+		]
+	},
+	"labels": [
+		"dependencies",
+		"{{#unless (equals manager 'regex')}}{{manager}}{{/unless}}"
+	],
+	"customManagers": [
+		{
+			"customType": "regex",
+			"description": "Updates mise tools (shorthands)",
+			"fileMatch": [
+				"(^|/)\\.?mise\\.toml$",
+				"(^|/)\\.?mise/config\\.toml$"
+			],
+			"datasourceTemplate": "undefined",
+			"matchStrings": [
+				"(?:^|\r\n|\r|\n|$)['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]"
+			]
+		},
+		{
+			"customType": "regex",
+			"description": "Updates mise tools (full)",
+			"fileMatch": [
+				"(^|/)\\.?mise\\.toml$",
+				"(^|/)\\.?mise/config\\.toml$"
+			],
+			"datasourceTemplate": "{{#if (equals datasource 'cargo')}}crate{{else}}{{#if (or (equals datasource 'ubi') (equals datasource 'aqua'))}}github-releases{{else}}{{datasource}}{{/if}}{{/if}}",
+			"currentValueTemplate": "{{{replace '^v(.+)$' '$1' currentValue}}}",
+			"extractVersionTemplate": "^v?(?<version>.+)",
+			"matchStrings": [
+				"['\"](?<datasource>.+?):(?<depName>.+?)['\"] *= *['\"][^\\d.]*(?<currentValue>.+?)['\"]"
+			]
+		},
+		{
+			"customType": "regex",
+			"description": "Updates min_version in mise config",
+			"fileMatch": [
+				"(^|/)\\.?mise\\.toml$",
+				"(^|/)\\.?mise/config\\.toml$"
+			],
+			"datasourceTemplate": "github-releases",
+			"depNameTemplate": "mise",
+			"packageNameTemplate": "jdx/mise",
+			"matchStrings": [
+				"min_version = \"(?<currentValue>.+)\""
+			]
+		},
+		{
+			"customType": "regex",
+			"description": "Updates mise versions in GitHub Actions",
+			"fileMatch": [
+				"^\\.github/workflows/.+\\.yml$"
+			],
+			"datasourceTemplate": "github-releases",
+			"depNameTemplate": "mise",
+			"packageNameTemplate": "jdx/mise",
+			"matchStrings": [
+				"version: (?<currentValue>.+)"
+			]
+		},
+		{
+			"customType": "regex",
+			"fileMatch": [
+				"^\\.github/renovate\\.json5$"
+			],
+			"matchStrings": [
+				"github>risu729/renovate-config#(?<currentValue>[0-9.]+)"
+			],
+			"datasourceTemplate": "github-releases",
+			"depNameTemplate": "risu729/renovate-config"
+		}
+	],
+	"packageRules": [
+		{
+			"matchDepNames": [
+				"node"
+			],
+			"ignoreUnstable": false
+		},
+		{
+			"matchDepNames": [
+				"mise"
+			],
+			"automerge": true
+		},
+		{
+			"matchCategories": [
+				"ci"
+			],
+			"semanticCommitType": "ci"
+		},
+		{
+			"matchFileNames": [
+				"mise.toml"
+			],
+			"addLabels": [
+				"mise"
+			]
+		},
+		{
+			"matchManagers": [
+				"custom.regex"
+			],
+			"matchDepNames": [
+				"cargo-binstall"
+			],
+			"overrideDatasource": "crate"
+		},
+		{
+			"matchManagers": [
+				"custom.regex"
+			],
+			"matchDepNames": [
+				"taplo"
+			],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "tamasfe/taplo"
+		},
+		{
+			"matchManagers": [
+				"custom.regex"
+			],
+			"matchDepNames": [
+				"biome"
+			],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "biomejs/biome",
+			"extractVersion": "^cli/v(?<version>.+)"
+		},
+		{
+			"matchManagers": [
+				"custom.regex"
+			],
+			"matchDepNames": [
+				"lychee"
+			],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "lycheeverse/lychee",
+			"extractVersion": "^lychee-v(?<version>.+)"
+		}
+	]
+}

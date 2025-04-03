@@ -4,10 +4,6 @@ import conventionalConfig from "@commitlint/config-conventional";
 import type { UserConfig } from "@commitlint/types";
 
 const excludeQuestions: string[] = [
-	// exclude isBreaking, breaking, and breakingBody because this package does not have versioning
-	"isBreaking",
-	"breaking",
-	"breakingBody",
 	// exclude isIssueAffected, issuesBody, and issues because I link branches to issues using GitHub
 	"isIssueAffected",
 	"issuesBody",
