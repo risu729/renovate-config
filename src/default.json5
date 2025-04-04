@@ -31,15 +31,15 @@
 		// renovate does not support tools not listed
 		// ref: https://docs.renovatebot.com/modules/manager/mise/#additional-information
 		{
-			customType: "regex",
+			customType: "jsonata",
 			description: "Updates mise tools (shorthands)",
 			fileMatch: ["(^|/)\\.?mise\\.toml$", "(^|/)\\.?mise/config\\.toml$"],
+			fileFormat: "toml",
 			// to avoid renovate config validator error
 			// Renovate throws "Missing datasource!" warnings but still works
 			datasourceTemplate: "undefined",
 			matchStrings: [
-				// test: https://regex101.com/r/8grHta
-				"(?:^|\r\n|\r|\n|$)['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]",
+				'$each($.tools, function($v, $k) { $contains($k, ":") ? undefined : { "depName": $k, "currentValue": $v } })',
 			],
 		},
 		// renovate does not support backends
@@ -59,22 +59,24 @@
 			],
 		},
 		{
-			customType: "regex",
+			customType: "jsonata",
 			description: "Updates min_version in mise config",
 			fileMatch: ["(^|/)\\.?mise\\.toml$", "(^|/)\\.?mise/config\\.toml$"],
+			fileFormat: "toml",
 			datasourceTemplate: "github-releases",
 			depNameTemplate: "mise",
 			packageNameTemplate: "jdx/mise",
-			matchStrings: ['min_version = "(?<currentValue>.+)"'],
+			matchStrings: ['{ "currentValue": $.min_version }'],
 		},
 		{
-			customType: "regex",
+			customType: "jsonata",
 			description: "Updates mise versions in GitHub Actions",
 			fileMatch: ["^\\.github/workflows/.+\\.yml$"],
+			fileFormat: "yaml",
 			datasourceTemplate: "github-releases",
 			depNameTemplate: "mise",
 			packageNameTemplate: "jdx/mise",
-			matchStrings: ["version: (?<currentValue>.+)"],
+			matchStrings: ['$.jobs.*.steps[$substringBefore(uses, "@") = "jdx/mise-action"].with.version.{ "currentValue": $ }'],
 		},
 		// support renovate config presets
 		{
