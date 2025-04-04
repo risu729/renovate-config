@@ -30,5 +30,6 @@ module.exports = {
 		"commitlint",
 		"jschema",
 		"buni",
+		"jsonata",
 	],
 };

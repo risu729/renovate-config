@@ -24,15 +24,16 @@
 	],
 	"customManagers": [
 		{
-			"customType": "regex",
+			"customType": "jsonata",
 			"description": "Updates mise tools (shorthands)",
 			"fileMatch": [
 				"(^|/)\\.?mise\\.toml$",
 				"(^|/)\\.?mise/config\\.toml$"
 			],
+			"fileFormat": "toml",
 			"datasourceTemplate": "undefined",
 			"matchStrings": [
-				"(?:^|\r\n|\r|\n|$)['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]"
+				"$each($.tools, function($v, $k) { $contains($k, \":\") ? undefined : { \"depName\": $k, \"currentValue\": $v } })"
 			]
 		},
 		{
@@ -50,30 +51,32 @@
 			]
 		},
 		{
-			"customType": "regex",
+			"customType": "jsonata",
 			"description": "Updates min_version in mise config",
 			"fileMatch": [
 				"(^|/)\\.?mise\\.toml$",
 				"(^|/)\\.?mise/config\\.toml$"
 			],
+			"fileFormat": "toml",
 			"datasourceTemplate": "github-releases",
 			"depNameTemplate": "mise",
 			"packageNameTemplate": "jdx/mise",
 			"matchStrings": [
-				"min_version = \"(?<currentValue>.+)\""
+				"{ \"currentValue\": $.min_version }"
 			]
 		},
 		{
-			"customType": "regex",
+			"customType": "jsonata",
 			"description": "Updates mise versions in GitHub Actions",
 			"fileMatch": [
 				"^\\.github/workflows/.+\\.yml$"
 			],
+			"fileFormat": "yaml",
 			"datasourceTemplate": "github-releases",
 			"depNameTemplate": "mise",
 			"packageNameTemplate": "jdx/mise",
 			"matchStrings": [
-				"version: (?<currentValue>.+)"
+				"$.jobs.*.steps[$substringBefore(uses, \"@\") = \"jdx/mise-action\"].with.version.{ \"currentValue\": $ }"
 			]
 		},
 		{
