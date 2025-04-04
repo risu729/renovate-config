@@ -76,7 +76,9 @@
 			datasourceTemplate: "github-releases",
 			depNameTemplate: "mise",
 			packageNameTemplate: "jdx/mise",
-			matchStrings: ['$.jobs.*.steps[$substringBefore(uses, "@") = "jdx/mise-action"].with.version.{ "currentValue": $ }'],
+			matchStrings: [
+				'$.jobs.*.steps[$substringBefore(uses, "@") = "jdx/mise-action"].with.version.{ "currentValue": $ }',
+			],
 		},
 		// support renovate config presets
 		{
