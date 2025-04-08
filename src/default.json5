@@ -24,7 +24,7 @@
 	},
 	labels: [
 		"dependencies",
-		"{{#unless (equals manager 'regex')}}{{manager}}{{/unless}}",
+		"{{#unless ((equals manager 'regex') or (equals manager 'jsonata'))}}{{manager}}{{/unless}}",
 	],
 	// ref: https://docs.renovatebot.com/modules/manager/regex/#advanced-capture
 	customManagers: [
