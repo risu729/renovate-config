@@ -9,7 +9,7 @@
         "@commitlint/cz-commitlint": "19.8.0",
         "@commitlint/types": "19.8.0",
         "@cspell/cspell-types": "8.18.1",
-        "@risu729/tsconfigs": "1.0.0",
+        "@risu729/tsconfigs": "1.0.1",
         "@types/bun": "1.2.9",
         "commitizen": "4.3.1",
         "prettier": "3.5.3",
@@ -97,7 +97,7 @@
 
     "@pnpm/npm-conf": ["@pnpm/npm-conf@2.3.1", "", { "dependencies": { "@pnpm/config.env-replace": "^1.1.0", "@pnpm/network.ca-file": "^1.0.1", "config-chain": "^1.1.11" } }, "sha512-c83qWb22rNRuB0UaVCI0uRPNRr8Z0FWnEIvT47jiHAmOIUHbBOg5XvV7pM5x+rKn9HRpjxquDbXYSXr3fAKFcw=="],
 
-    "@risu729/tsconfigs": ["@risu729/tsconfigs@1.0.0", "", {}, "sha512-PP7MSJnFwJhqBW1/dnbD2vGXqnJ7wU7nao1XJiUnOHChGkOTfwzf+YjJkDwLX3DDhJp59mRwUv3PYZfthT3Z1w=="],
+    "@risu729/tsconfigs": ["@risu729/tsconfigs@1.0.1", "", {}, "sha512-aOXwG0bxFmZw9D/eD8mOQTd3qPt/9X7G1u20a3xz/xmpMmbLZdwsU/rH4lAVBem9EO9F/gQawiETeChu6Ta/vw=="],
 
     "@sec-ant/readable-stream": ["@sec-ant/readable-stream@0.4.1", "", {}, "sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg=="],
 
