@@ -20,7 +20,7 @@
 	},
 	"labels": [
 		"dependencies",
-		"{{#unless ((equals manager 'regex') or (equals manager 'jsonata'))}}{{manager}}{{/unless}}"
+		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}"
 	],
 	"customManagers": [
 		{
