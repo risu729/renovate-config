@@ -78,17 +78,6 @@
 			"matchStrings": [
 				"$.jobs.*.steps[$substringBefore(uses, \"@\") = \"jdx/mise-action\"].with.version.{ \"currentValue\": $ }"
 			]
-		},
-		{
-			"customType": "regex",
-			"fileMatch": [
-				"^\\.github/renovate\\.json5$"
-			],
-			"matchStrings": [
-				"github>risu729/renovate-config#(?<currentValue>[0-9.]+)"
-			],
-			"datasourceTemplate": "github-releases",
-			"depNameTemplate": "risu729/renovate-config"
 		}
 	],
 	"packageRules": [
