@@ -52,25 +52,11 @@
 		},
 		{
 			// disable noNodejsModules rule for files running in bun or Node.js
-			"include": ["**/*.config.*", "**/scripts/**"],
+			"include": ["**/*.config.*"],
 			"linter": {
 				"rules": {
 					"correctness": {
 						"noNodejsModules": "off"
-					}
-				}
-			}
-		},
-		{
-			// disable noConsole and useTopLevelRegex rules for scripts
-			"include": ["**/scripts/**"],
-			"linter": {
-				"rules": {
-					"suspicious": {
-						"noConsole": "off"
-					},
-					"performance": {
-						"useTopLevelRegex": "off"
 					}
 				}
 			}

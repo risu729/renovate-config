@@ -11,23 +11,35 @@
 		":prConcurrentLimitNone",
 		"customManagers:biomeVersions",
 	],
+	ignorePresets: [":ignoreModulesAndTests"],
+	bun: {
+		ignorePaths: [
+			// ignorePaths is not merged
+			// ref: https://docs.renovatebot.com/configuration-options/#ignorepaths
+			"**/node_modules/**",
+			// ignore bun.lockb
+			// an empty bun.lockb is required to Bun detected by Cloudflare Workers/Pages Builds
+			"**/bun.lockb",
+		],
+	},
 	labels: [
 		"dependencies",
-		"{{#unless (equals manager 'regex')}}{{manager}}{{/unless}}",
+		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}",
 	],
 	// ref: https://docs.renovatebot.com/modules/manager/regex/#advanced-capture
 	customManagers: [
 		// renovate does not support tools not listed
 		// ref: https://docs.renovatebot.com/modules/manager/mise/#additional-information
 		{
-			customType: "regex",
+			customType: "jsonata",
 			description: "Updates mise tools (shorthands)",
 			fileMatch: ["(^|/)\\.?mise\\.toml$", "(^|/)\\.?mise/config\\.toml$"],
+			fileFormat: "toml",
 			// to avoid renovate config validator error
+			// Renovate throws "Missing datasource!" warnings but still works
 			datasourceTemplate: "undefined",
 			matchStrings: [
-				// test: https://regex101.com/r/8grHta
-				"['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]",
+				'$each($.tools, function($v, $k) { $contains($k, ":") ? undefined : { "depName": $k, "currentValue": $v } })',
 			],
 		},
 		// renovate does not support backends
@@ -37,32 +49,36 @@
 			description: "Updates mise tools (full)",
 			fileMatch: ["(^|/)\\.?mise\\.toml$", "(^|/)\\.?mise/config\\.toml$"],
 			// supports only cargo, npm, ubi, and aqua backends
-			datasourceTemplate: "{{#if (equals datasource 'cargo')}}crate{{else}} \
+			datasourceTemplate: "{{#if (equals datasource 'cargo')}}crate{{else}}\
 {{#if (or (equals datasource 'ubi') (equals datasource 'aqua'))}}github-releases{{else}}{{datasource}}{{/if}}{{/if}}",
 			currentValueTemplate: "{{{replace '^v(.+)$' '$1' currentValue}}}",
 			extractVersionTemplate: "^v?(?<version>.+)",
 			matchStrings: [
 				// test: https://regex101.com/r/K6Imdx
-				"['\"](?<depName>(?<datasource>.+?):(?<packageName>.+?))['\"] *= *['\"](?<currentValue>.+?)['\"]",
+				"['\"](?<datasource>.+?):(?<depName>.+?)['\"] *= *['\"][^\\d.]*(?<currentValue>.+?)['\"]",
 			],
 		},
 		{
-			customType: "regex",
+			customType: "jsonata",
 			description: "Updates min_version in mise config",
 			fileMatch: ["(^|/)\\.?mise\\.toml$", "(^|/)\\.?mise/config\\.toml$"],
+			fileFormat: "toml",
 			datasourceTemplate: "github-releases",
 			depNameTemplate: "mise",
 			packageNameTemplate: "jdx/mise",
-			matchStrings: ['min_version = "(?<currentValue>.+)"'],
+			matchStrings: ['{ "currentValue": $.min_version }'],
 		},
 		{
-			customType: "regex",
+			customType: "jsonata",
 			description: "Updates mise versions in GitHub Actions",
 			fileMatch: ["^\\.github/workflows/.+\\.yml$"],
+			fileFormat: "yaml",
 			datasourceTemplate: "github-releases",
 			depNameTemplate: "mise",
 			packageNameTemplate: "jdx/mise",
-			matchStrings: ["version: (?<currentValue>.+)"],
+			matchStrings: [
+				'$.jobs.*.steps[$substringBefore(uses, "@") = "jdx/mise-action"].with.version.{ "currentValue": $ }',
+			],
 		},
 	],
 	packageRules: [
@@ -107,8 +123,18 @@
 		},
 		{
 			matchManagers: ["custom.regex"],
-			matchDepNames: ["aqua:biomejs/biome"],
-			extractVersion: "^cli-v(?<version>.+)",
+			matchDepNames: ["biome"],
+			overrideDatasource: "github-releases",
+			overridePackageName: "biomejs/biome",
+			extractVersion: "^cli/v(?<version>.+)",
+		},
+		{
+			matchManagers: ["custom.regex"],
+			matchDepNames: ["lychee"],
+			overrideDatasource: "github-releases",
+			// cspell:ignore lycheeverse
+			overridePackageName: "lycheeverse/lychee",
+			extractVersion: "^lychee-v(?<version>.+)",
 		},
 	],
 }

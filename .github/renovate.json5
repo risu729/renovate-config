@@ -1,7 +1,7 @@
 {
 	// ref: https://docs.renovatebot.com/configuration-options/
 	$schema: "https://docs.renovatebot.com/renovate-schema.json",
-	extends: ["github>risu729/renovate-config#2.0.0"],
+	extends: ["github>risu729/renovate-config"],
 	// ref: https://docs.renovatebot.com/modules/manager/regex/#advanced-capture
 	customManagers: [
 		{
@@ -10,6 +10,13 @@
 			matchStrings: ["github>risu729/renovate-config#(?<currentValue>[0-9.]+)"],
 			datasourceTemplate: "github-releases",
 			depNameTemplate: "risu729/renovate-config",
+		},
+	],
+	packageRules: [
+		{
+			matchFileNames: ["README.md"],
+			// enable automerge for docs
+			automerge: true,
 		},
 	],
 }
