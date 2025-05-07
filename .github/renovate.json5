@@ -14,7 +14,7 @@
 	],
 	packageRules: [
 		{
-			matchFileNames: ["README.md"],
+                	managerFilePatterns: ["/^README.md$/"],
 			// enable automerge for docs
 			automerge: true,
 		},
