@@ -33,7 +33,10 @@
 		{
 			customType: "jsonata",
 			description: "Updates mise tools (shorthands)",
-			managerFilePatterns: ["(^|/)\\.?mise\\.toml$", "(^|/)\\.?mise/config\\.toml$"],
+			managerFilePatterns: [
+				"(^|/)\\.?mise\\.toml$",
+				"(^|/)\\.?mise/config\\.toml$",
+			],
 			fileFormat: "toml",
 			// to avoid renovate config validator error
 			// Renovate throws "Missing datasource!" warnings but still works
@@ -47,7 +50,10 @@
 		{
 			customType: "regex",
 			description: "Updates mise tools (full)",
-			managerFilePatterns: ["(^|/)\\.?mise\\.toml$", "(^|/)\\.?mise/config\\.toml$"],
+			managerFilePatterns: [
+				"(^|/)\\.?mise\\.toml$",
+				"(^|/)\\.?mise/config\\.toml$",
+			],
 			// supports only cargo, npm, ubi, and aqua backends
 			datasourceTemplate: "{{#if (equals datasource 'cargo')}}crate{{else}}\
 {{#if (or (equals datasource 'ubi') (equals datasource 'aqua'))}}github-releases{{else}}{{datasource}}{{/if}}{{/if}}",
@@ -61,7 +67,10 @@
 		{
 			customType: "jsonata",
 			description: "Updates min_version in mise config",
-			managerFilePatterns: ["(^|/)\\.?mise\\.toml$", "(^|/)\\.?mise/config\\.toml$"],
+			managerFilePatterns: [
+				"(^|/)\\.?mise\\.toml$",
+				"(^|/)\\.?mise/config\\.toml$",
+			],
 			fileFormat: "toml",
 			datasourceTemplate: "github-releases",
 			depNameTemplate: "mise",
