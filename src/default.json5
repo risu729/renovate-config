@@ -145,5 +145,22 @@
 			overridePackageName: "lycheeverse/lychee",
 			extractVersion: "^lychee-v(?<version>.+)",
 		},
+		{
+			matchManagers: ["custom.regex"],
+			matchDepNames: ["ghalint"],
+			overrideDatasource: "github-releases",
+			// cspell:ignore shunsuke
+			overridePackageName: "suzuki-shunsuke/ghalint",
+			currentValueTemplate: "{{{replace '^v(.+)$' '$1' currentValue}}}",
+			extractVersionTemplate: "^v?(?<version>.+)",
+		},
+		{
+			matchManagers: ["custom.regex"],
+			matchDepNames: ["pinact"],
+			overrideDatasource: "github-releases",
+			overridePackageName: "suzuki-shunsuke/pinact",
+			currentValueTemplate: "{{{replace '^v(.+)$' '$1' currentValue}}}",
+			extractVersionTemplate: "^v?(?<version>.+)",
+		},
 	],
 }
