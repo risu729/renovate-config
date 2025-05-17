@@ -16,6 +16,6 @@ or to use a specific version:
 
 ```json
 {
-	"extends": ["github>risu729/renovate-config#3.3.2"]
+	"extends": ["github>risu729/renovate-config#3.3.3"]
 }
 ```
