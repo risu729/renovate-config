@@ -27,8 +27,8 @@
 			"customType": "jsonata",
 			"description": "Updates mise tools (shorthands)",
 			"managerFilePatterns": [
-				"(^|/)\\.?mise\\.toml$",
-				"(^|/)\\.?mise/config\\.toml$"
+				"/(^|/)\\.?mise\\.toml$/",
+				"/(^|/)\\.?mise/config\\.toml$/"
 			],
 			"fileFormat": "toml",
 			"datasourceTemplate": "undefined",
@@ -40,8 +40,8 @@
 			"customType": "regex",
 			"description": "Updates mise tools (full)",
 			"managerFilePatterns": [
-				"(^|/)\\.?mise\\.toml$",
-				"(^|/)\\.?mise/config\\.toml$"
+				"/(^|/)\\.?mise\\.toml$/",
+				"/(^|/)\\.?mise/config\\.toml$/"
 			],
 			"datasourceTemplate": "{{#if (equals datasource 'cargo')}}crate{{else}}{{#if (or (equals datasource 'ubi') (equals datasource 'aqua'))}}github-releases{{else}}{{datasource}}{{/if}}{{/if}}",
 			"currentValueTemplate": "{{{replace '^v(.+)$' '$1' currentValue}}}",
@@ -54,8 +54,8 @@
 			"customType": "jsonata",
 			"description": "Updates min_version in mise config",
 			"managerFilePatterns": [
-				"(^|/)\\.?mise\\.toml$",
-				"(^|/)\\.?mise/config\\.toml$"
+				"/(^|/)\\.?mise\\.toml$/",
+				"/(^|/)\\.?mise/config\\.toml$/"
 			],
 			"fileFormat": "toml",
 			"datasourceTemplate": "github-releases",
@@ -69,7 +69,7 @@
 			"customType": "jsonata",
 			"description": "Updates mise versions in GitHub Actions",
 			"managerFilePatterns": [
-				"^\\.github/workflows/.+\\.yml$"
+				"/^\\.github/workflows/.+\\.yml$/"
 			],
 			"fileFormat": "yaml",
 			"datasourceTemplate": "github-releases",
@@ -109,7 +109,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"cargo-binstall"
@@ -118,7 +118,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"taplo"
@@ -128,7 +128,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"biome"
@@ -139,7 +139,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"lychee"
@@ -150,7 +150,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"ghalint"
@@ -161,7 +161,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"pinact"
