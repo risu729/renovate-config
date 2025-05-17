@@ -109,7 +109,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"cargo-binstall"
@@ -118,7 +118,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"taplo"
@@ -128,7 +128,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"biome"
@@ -139,7 +139,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"lychee"
@@ -150,7 +150,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"ghalint"
@@ -161,7 +161,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"pinact"
