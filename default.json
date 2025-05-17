@@ -69,7 +69,8 @@
 			"customType": "jsonata",
 			"description": "Updates mise versions in GitHub Actions",
 			"managerFilePatterns": [
-				"/^\\.github/workflows/.+\\.yml$/"
+				"/(^|/)(workflow-templates|\\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\\.ya?ml$/",
+				"/(^|/)action\\.ya?ml$/"
 			],
 			"fileFormat": "yaml",
 			"datasourceTemplate": "github-releases",
