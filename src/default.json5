@@ -34,8 +34,8 @@
 			customType: "jsonata",
 			description: "Updates mise tools (shorthands)",
 			managerFilePatterns: [
-				"(^|/)\\.?mise\\.toml$",
-				"(^|/)\\.?mise/config\\.toml$",
+				"/(^|/)\\.?mise\\.toml$/",
+				"/(^|/)\\.?mise/config\\.toml$/",
 			],
 			fileFormat: "toml",
 			// to avoid renovate config validator error
@@ -51,8 +51,8 @@
 			customType: "regex",
 			description: "Updates mise tools (full)",
 			managerFilePatterns: [
-				"(^|/)\\.?mise\\.toml$",
-				"(^|/)\\.?mise/config\\.toml$",
+				"/(^|/)\\.?mise\\.toml$/",
+				"/(^|/)\\.?mise/config\\.toml$/",
 			],
 			// supports only cargo, npm, ubi, and aqua backends
 			datasourceTemplate: "{{#if (equals datasource 'cargo')}}crate{{else}}\
@@ -68,8 +68,8 @@
 			customType: "jsonata",
 			description: "Updates min_version in mise config",
 			managerFilePatterns: [
-				"(^|/)\\.?mise\\.toml$",
-				"(^|/)\\.?mise/config\\.toml$",
+				"/(^|/)\\.?mise\\.toml$/",
+				"/(^|/)\\.?mise/config\\.toml$/",
 			],
 			fileFormat: "toml",
 			datasourceTemplate: "github-releases",
@@ -80,7 +80,7 @@
 		{
 			customType: "jsonata",
 			description: "Updates mise versions in GitHub Actions",
-			managerFilePatterns: ["^\\.github/workflows/.+\\.yml$"],
+			managerFilePatterns: ["/^\\.github/workflows/.+\\.yml$/"],
 			fileFormat: "yaml",
 			datasourceTemplate: "github-releases",
 			depNameTemplate: "mise",
