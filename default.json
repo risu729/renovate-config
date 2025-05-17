@@ -157,7 +157,7 @@
 			],
 			"overrideDatasource": "github-releases",
 			"overridePackageName": "suzuki-shunsuke/ghalint",
-			"extractVersion": "^v?(?<version>.+)"
+			"extractVersion": "^v(?<version>.+)"
 		},
 		{
 			"matchManagers": [
@@ -168,7 +168,7 @@
 			],
 			"overrideDatasource": "github-releases",
 			"overridePackageName": "suzuki-shunsuke/pinact",
-			"extractVersion": "^v?(?<version>.+)"
+			"extractVersion": "^v(?<version>.+)"
 		}
 	]
 }
