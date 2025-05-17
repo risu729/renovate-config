@@ -145,20 +145,5 @@
 			overridePackageName: "lycheeverse/lychee",
 			extractVersion: "^lychee-v(?<version>.+)",
 		},
-		{
-			matchManagers: ["custom.jsonata"],
-			matchDepNames: ["ghalint"],
-			overrideDatasource: "github-releases",
-			// cspell:ignore shunsuke
-			overridePackageName: "suzuki-shunsuke/ghalint",
-			extractVersion: "^v(?<version>.+)",
-		},
-		{
-			matchManagers: ["custom.jsonata"],
-			matchDepNames: ["pinact"],
-			overrideDatasource: "github-releases",
-			overridePackageName: "suzuki-shunsuke/pinact",
-			extractVersion: "^v(?<version>.+)",
-		},
 	],
 }
