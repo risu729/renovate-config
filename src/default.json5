@@ -34,6 +34,7 @@
 			customType: "jsonata",
 			description: "Updates mise tools (shorthands)",
 			managerFilePatterns: [
+				// ref: https://docs.renovatebot.com/modules/manager/mise/#file-matching
 				"/(^|/)\\.?mise\\.toml$/",
 				"/(^|/)\\.?mise/config\\.toml$/",
 			],
@@ -51,6 +52,7 @@
 			customType: "regex",
 			description: "Updates mise tools (full)",
 			managerFilePatterns: [
+				// ref: https://docs.renovatebot.com/modules/manager/mise/#file-matching
 				"/(^|/)\\.?mise\\.toml$/",
 				"/(^|/)\\.?mise/config\\.toml$/",
 			],
@@ -68,6 +70,7 @@
 			customType: "jsonata",
 			description: "Updates min_version in mise config",
 			managerFilePatterns: [
+				// ref: https://docs.renovatebot.com/modules/manager/mise/#file-matching
 				"/(^|/)\\.?mise\\.toml$/",
 				"/(^|/)\\.?mise/config\\.toml$/",
 			],
@@ -80,7 +83,12 @@
 		{
 			customType: "jsonata",
 			description: "Updates mise versions in GitHub Actions",
-			managerFilePatterns: ["/^\\.github/workflows/.+\\.yml$/"],
+			managerFilePatterns: [
+				// ref: https://docs.renovatebot.com/modules/manager/github-actions/#file-matching
+				// cspell:ignore gitea forgejo
+				"/(^|/)(workflow-templates|\\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\\.ya?ml$/",
+				"/(^|/)action\\.ya?ml$/",
+			],
 			fileFormat: "yaml",
 			datasourceTemplate: "github-releases",
 			depNameTemplate: "mise",
@@ -151,14 +159,14 @@
 			overrideDatasource: "github-releases",
 			// cspell:ignore shunsuke
 			overridePackageName: "suzuki-shunsuke/ghalint",
-			extractVersion: "^v?(?<version>.+)",
+			extractVersion: "^v(?<version>.+)",
 		},
 		{
 			matchManagers: ["custom.jsonata"],
 			matchDepNames: ["pinact"],
 			overrideDatasource: "github-releases",
 			overridePackageName: "suzuki-shunsuke/pinact",
-			extractVersion: "^v?(?<version>.+)",
+			extractVersion: "^v(?<version>.+)",
 		},
 	],
 }

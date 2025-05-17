@@ -69,7 +69,8 @@
 			"customType": "jsonata",
 			"description": "Updates mise versions in GitHub Actions",
 			"managerFilePatterns": [
-				"/^\\.github/workflows/.+\\.yml$/"
+				"/(^|/)(workflow-templates|\\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\\.ya?ml$/",
+				"/(^|/)action\\.ya?ml$/"
 			],
 			"fileFormat": "yaml",
 			"datasourceTemplate": "github-releases",
@@ -157,7 +158,7 @@
 			],
 			"overrideDatasource": "github-releases",
 			"overridePackageName": "suzuki-shunsuke/ghalint",
-			"extractVersion": "^v?(?<version>.+)"
+			"extractVersion": "^v(?<version>.+)"
 		},
 		{
 			"matchManagers": [
@@ -168,7 +169,7 @@
 			],
 			"overrideDatasource": "github-releases",
 			"overridePackageName": "suzuki-shunsuke/pinact",
-			"extractVersion": "^v?(?<version>.+)"
+			"extractVersion": "^v(?<version>.+)"
 		}
 	]
 }
