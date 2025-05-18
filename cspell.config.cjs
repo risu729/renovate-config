@@ -19,6 +19,9 @@ module.exports = {
 		"default.json",
 		// ignore license files
 		"LICENSE",
+		// ignore test data
+		"test/output.json",
+		"test/response.json",
 	],
 	words: [
 		"risu",
