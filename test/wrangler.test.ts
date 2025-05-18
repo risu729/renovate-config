@@ -1,8 +1,8 @@
-import config from "../default.json" with { type: "json" };
-import response from "./response.json" with { type: "json" };
-import output from "./output.json" with { type: "json" };
 import { expect, test } from "bun:test";
 import jsonata from "jsonata";
+import config from "../default.json" with { type: "json" };
+import output from "./output.json" with { type: "json" };
+import response from "./response.json" with { type: "json" };
 
 test("wrangler-compatibility-date JSONata expression", async () => {
 	const expression =
