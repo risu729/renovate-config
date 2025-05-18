@@ -2,4 +2,4 @@
 
 [files]
 ignore-hidden = false
-extend-exclude = [".git"]
+extend-exclude = [".git", "test/output.json", "test/response.json"]
