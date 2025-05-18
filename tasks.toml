@@ -18,6 +18,10 @@ depends_post = [
 	"{% if env.CI is defined %}util:nodiff{% else %}util:donothing{% endif %}",
 ]
 
+["test"]
+depends = ["build", "buni"]
+run = "bun test"
+
 ["check:biome"]
 run = "biome {% if env.LINT is undefined %}check --write{% else %}ci{% endif %} --error-on-warnings"
 

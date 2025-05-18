@@ -79,8 +79,44 @@
 			"matchStrings": [
 				"$.jobs.*.steps[$substringBefore(uses, \"@\") = \"jdx/mise-action\"].with.version.{ \"currentValue\": $ }"
 			]
+		},
+		{
+			"customType": "jsonata",
+			"description": "Updates compatibility_date in wrangler.json",
+			"managerFilePatterns": [
+				"/(^|/)wrangler\\.jsonc?$/"
+			],
+			"fileFormat": "json",
+			"datasourceTemplate": "custom.wrangler-compatibility-date",
+			"depNameTemplate": "compatibility_date",
+			"versioningTemplate": "regex:^(?<minor>[0-9]{4})-(?<patch>[0-9]{2})-(?<build>[0-9]{2})$",
+			"matchStrings": [
+				"{ \"currentValue\": compatibility_date }"
+			]
+		},
+		{
+			"customType": "jsonata",
+			"description": "Updates compatibility_date in wrangler.toml",
+			"managerFilePatterns": [
+				"/(^|/)wrangler\\.toml$/"
+			],
+			"fileFormat": "toml",
+			"datasourceTemplate": "custom.wrangler-compatibility-date",
+			"depNameTemplate": "compatibility_date",
+			"versioningTemplate": "regex:^(?<minor>[0-9]{4})-(?<patch>[0-9]{2})-(?<build>[0-9]{2})$",
+			"matchStrings": [
+				"{ \"currentValue\": compatibility_date }"
+			]
 		}
 	],
+	"customDatasources": {
+		"wrangler-compatibility-date": {
+			"defaultRegistryUrlTemplate": "https://registry.npmjs.org/workerd",
+			"transformTemplates": [
+				"( \t\t\t\t\t\t$latest := $lookup(versions, `dist-tags`.latest); \t\t\t\t\t\t$transform_version_to_date := \t\t\t\t\t\t\t\t/* exclude beta versions */ \t\t\t\t\t\t\t\t$match(?, /^1.([0-9]{4})([0-9]{2})([0-9]{2}).[0-9]+$/) \t\t\t\t\t\t\t\t\t\t~> $lookup(?, \"groups\") \t\t\t\t\t\t\t\t\t\t~> $join(?, \"-\"); \t\t\t\t\t\t{ \t\t\t\t\t\t\t\t\"tags\": $each(`dist-tags`, function($version, $key) { \t\t\t\t\t\t\t\t\t\t{ \t\t\t\t\t\t\t\t\t\t\t\t$key: $transform_version_to_date($version) \t\t\t\t\t\t\t\t\t\t} \t\t\t\t\t\t\t\t}) ~> $merge(), \t\t\t\t\t\t\t\t\"homepage\": $exists(homepage) ? homepage : $latest.homepage, \t\t\t\t\t\t\t\t\"sourceUrl\": $exists(repository.url) ? repository.url : $latest.repository.url, \t\t\t\t\t\t\t\t\"releases\": $each(versions, function($data, $version) { \t\t\t\t\t\t\t\t\t\t{ \t\t\t\t\t\t\t\t\t\t\t\t\"version\": $transform_version_to_date($version), \t\t\t\t\t\t\t\t\t\t\t\t\"gitRef\": $data.gitHead, \t\t\t\t\t\t\t\t\t\t\t\t\"releaseTimestamp\": $lookup(time, $version), \t\t\t\t\t\t\t\t\t\t\t\t\"sourceUrl\": $data.repository.url != repository.url ? $data.repository.url \t\t\t\t\t\t\t\t\t\t} \t\t\t\t\t\t\t\t}) ~> $filter(function($data) { \t\t\t\t\t\t\t\t\t\t$exists($data.version) \t\t\t\t\t\t\t\t}) ~> $sort(function($left, $right) { \t\t\t\t\t\t\t\t\t\t/* sort from latest to oldest */ \t\t\t\t\t\t\t\t\t\t$toMillis($left.releaseTimestamp) < $toMillis($right.releaseTimestamp) \t\t\t\t\t\t\t\t}) ~> $reduce(function($acc, $data) { \t\t\t\t\t\t\t\t\t\t/* only keep the latest version for each date */ \t\t\t\t\t\t\t\t\t\t$lookup($acc, $data.version) ? $acc : $merge([$acc, { $data.version: $data }]) \t\t\t\t\t\t\t\t}, []) ~> $each(function($data) { $data }) \t\t\t\t\t\t\t\t\t/* sort from oldest to latest */ \t\t\t\t\t\t\t\t\t~> $reverse() \t\t\t\t\t\t} \t\t\t\t)"
+			]
+		}
+	},
 	"packageRules": [
 		{
 			"matchDepNames": [
