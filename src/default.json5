@@ -239,5 +239,13 @@
 			overridePackageName: "suzuki-shunsuke/pinact",
 			extractVersion: "^v(?<version>.+)",
 		},
+		{
+			matchManagers: ["custom.jsonata"],
+			matchDepNames: ["jc"],
+			overrideDatasource: "github-releases",
+			// cspell:ignore kellyjonbrazil
+			overridePackageName: "kellyjonbrazil/jc",
+			extractVersion: "^v(?<version>.+)",
+		},
 	],
 }
