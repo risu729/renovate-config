@@ -8,6 +8,9 @@ exclude_path = [
 	".gitignore",
 	"bun.lock",
 	"default.json",
+	"test/__snapshots__",
+	# ignore fixtures
+	"test/fixtures",
 ]
 
 exclude = [

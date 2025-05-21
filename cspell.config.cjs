@@ -20,8 +20,8 @@ module.exports = {
 		// ignore license files
 		"LICENSE",
 		// ignore test data
-		"test/output.json",
-		"test/response.json",
+		"test/fixtures/",
+		"test/__snapshots__/",
 	],
 	words: [
 		"risu",
