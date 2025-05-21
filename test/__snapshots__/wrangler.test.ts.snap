@@ -1,0 +1,81 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wrangler-compatibility-date JSONata expression 1`] = `
+{
+  "homepage": "https://github.com/cloudflare/workers-sdk/tree/main/packages/miniflare#readme",
+  "releases": [
+    {
+      "releaseTimestamp": "2025-03-13T10:51:56.936Z",
+      "version": "2025-03-10",
+    },
+    {
+      "releaseTimestamp": "2025-03-19T09:17:59.098Z",
+      "version": "2025-03-17",
+    },
+    {
+      "releaseTimestamp": "2025-03-20T22:56:33.631Z",
+      "version": "2025-03-19",
+    },
+    {
+      "releaseTimestamp": "2025-03-22T15:30:40.160Z",
+      "version": "2025-03-20",
+    },
+    {
+      "releaseTimestamp": "2025-04-04T06:50:21.389Z",
+      "version": "2025-03-21",
+    },
+    {
+      "releaseTimestamp": "2025-04-04T19:21:04.815Z",
+      "version": "2025-04-04",
+    },
+    {
+      "releaseTimestamp": "2025-04-08T14:09:50.545Z",
+      "version": "2025-04-05",
+    },
+    {
+      "releaseTimestamp": "2025-04-08T20:39:16.892Z",
+      "version": "2025-04-08",
+    },
+    {
+      "releaseTimestamp": "2025-04-10T18:23:03.518Z",
+      "version": "2025-04-09",
+    },
+    {
+      "releaseTimestamp": "2025-04-15T18:40:17.489Z",
+      "version": "2025-04-10",
+    },
+    {
+      "releaseTimestamp": "2025-04-17T05:16:04.196Z",
+      "version": "2025-04-16",
+    },
+    {
+      "releaseTimestamp": "2025-04-22T15:24:44.957Z",
+      "version": "2025-04-17",
+    },
+    {
+      "releaseTimestamp": "2025-04-23T13:01:03.689Z",
+      "version": "2025-04-22",
+    },
+    {
+      "releaseTimestamp": "2025-04-25T09:38:47.381Z",
+      "version": "2025-04-24",
+    },
+    {
+      "releaseTimestamp": "2025-05-01T18:55:34.136Z",
+      "version": "2025-04-28",
+    },
+    {
+      "releaseTimestamp": "2025-05-07T11:36:09.731Z",
+      "version": "2025-05-07",
+    },
+    {
+      "releaseTimestamp": "2025-05-20T09:42:26.503Z",
+      "version": "2025-05-08",
+    },
+  ],
+  "sourceUrl": "git+https://github.com/cloudflare/workers-sdk.git",
+  "tags": {
+    "latest": "2025-05-08",
+  },
+}
+`;

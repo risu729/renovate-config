@@ -1,8 +1,10 @@
 import { expect, test } from "bun:test";
 import jsonata from "jsonata";
 import config from "../default.json" with { type: "json" };
-import output from "./output.json" with { type: "json" };
-import response from "./response.json" with { type: "json" };
+// cspell:ignore miniflare
+import response from "./fixtures/npm-registry-miniflare.json" with {
+	type: "json",
+};
 
 test("wrangler-compatibility-date JSONata expression", async () => {
 	const expression =
@@ -16,5 +18,5 @@ test("wrangler-compatibility-date JSONata expression", async () => {
 	}
 
 	const result = await jsonata(expression).evaluate(response);
-	expect(result).toStrictEqual(output);
+	expect(result).toMatchSnapshot();
 });
