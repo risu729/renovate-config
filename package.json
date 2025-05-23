@@ -12,7 +12,7 @@
 		"commitizen": "4.3.1",
 		"jsonata": "2.0.6",
 		"prettier": "3.5.3",
-		"semantic-release": "24.2.4",
+		"semantic-release": "24.2.5",
 		"typescript": "5.8.3"
 	}
 }
