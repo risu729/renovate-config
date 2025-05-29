@@ -46,26 +46,6 @@
 				'$each($.tools, function($v, $k) { $contains($k, ":") ? undefined : { "depName": $k, "currentValue": $v } })',
 			],
 		},
-		// renovate does not support backends
-		// ref: https://github.com/renovatebot/renovate/issues/30387
-		{
-			customType: "regex",
-			description: "Updates mise tools (full)",
-			managerFilePatterns: [
-				// ref: https://docs.renovatebot.com/modules/manager/mise/#file-matching
-				"/(^|/)\\.?mise\\.toml$/",
-				"/(^|/)\\.?mise/config\\.toml$/",
-			],
-			// supports only cargo, npm, ubi, and aqua backends
-			datasourceTemplate: "{{#if (equals datasource 'cargo')}}crate{{else}}\
-{{#if (or (equals datasource 'ubi') (equals datasource 'aqua'))}}github-releases{{else}}{{datasource}}{{/if}}{{/if}}",
-			currentValueTemplate: "{{{replace '^v(.+)$' '$1' currentValue}}}",
-			extractVersionTemplate: "^v?(?<version>.+)",
-			matchStrings: [
-				// test: https://regex101.com/r/K6Imdx
-				"['\"](?<datasource>.+?):(?<depName>.+?)['\"] *= *['\"][^\\d.]*(?<currentValue>.+?)['\"]",
-			],
-		},
 		{
 			customType: "jsonata",
 			description: "Updates min_version in mise config",

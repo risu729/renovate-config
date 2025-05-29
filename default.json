@@ -37,20 +37,6 @@
 			]
 		},
 		{
-			"customType": "regex",
-			"description": "Updates mise tools (full)",
-			"managerFilePatterns": [
-				"/(^|/)\\.?mise\\.toml$/",
-				"/(^|/)\\.?mise/config\\.toml$/"
-			],
-			"datasourceTemplate": "{{#if (equals datasource 'cargo')}}crate{{else}}{{#if (or (equals datasource 'ubi') (equals datasource 'aqua'))}}github-releases{{else}}{{datasource}}{{/if}}{{/if}}",
-			"currentValueTemplate": "{{{replace '^v(.+)$' '$1' currentValue}}}",
-			"extractVersionTemplate": "^v?(?<version>.+)",
-			"matchStrings": [
-				"['\"](?<datasource>.+?):(?<depName>.+?)['\"] *= *['\"][^\\d.]*(?<currentValue>.+?)['\"]"
-			]
-		},
-		{
 			"customType": "jsonata",
 			"description": "Updates min_version in mise config",
 			"managerFilePatterns": [
