@@ -19,6 +19,9 @@ module.exports = {
 		"default.json",
 		// ignore license files
 		"LICENSE",
+		// ignore test data
+		"test/fixtures/",
+		"test/__snapshots__/",
 	],
 	words: [
 		"risu",
@@ -30,5 +33,6 @@ module.exports = {
 		"commitlint",
 		"jschema",
 		"buni",
+		"jsonata",
 	],
 };

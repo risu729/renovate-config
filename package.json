@@ -2,16 +2,17 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@risu729/renovate-config",
 	"devDependencies": {
-		"@commitlint/cli": "19.8.0",
-		"@commitlint/config-conventional": "19.8.0",
-		"@commitlint/cz-commitlint": "19.8.0",
-		"@commitlint/types": "19.8.0",
-		"@cspell/cspell-types": "8.18.1",
-		"@risu729/tsconfigs": "1.0.0",
-		"@types/bun": "1.2.8",
+		"@commitlint/cli": "19.8.1",
+		"@commitlint/config-conventional": "19.8.1",
+		"@commitlint/cz-commitlint": "19.8.1",
+		"@commitlint/types": "19.8.1",
+		"@cspell/cspell-types": "9.0.2",
+		"@risu729/tsconfigs": "1.0.1",
+		"@types/bun": "1.2.15",
 		"commitizen": "4.3.1",
+		"jsonata": "2.0.6",
 		"prettier": "3.5.3",
-		"semantic-release": "24.2.3",
-		"typescript": "5.8.2"
+		"semantic-release": "24.2.5",
+		"typescript": "5.8.3"
 	}
 }

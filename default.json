@@ -20,60 +20,89 @@
 	},
 	"labels": [
 		"dependencies",
-		"{{#unless (equals manager 'regex')}}{{manager}}{{/unless}}"
+		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}"
 	],
 	"customManagers": [
 		{
-			"customType": "regex",
+			"customType": "jsonata",
 			"description": "Updates mise tools (shorthands)",
-			"fileMatch": [
-				"(^|/)\\.?mise\\.toml$",
-				"(^|/)\\.?mise/config\\.toml$"
+			"managerFilePatterns": [
+				"/(^|/)\\.?mise\\.toml$/",
+				"/(^|/)\\.?mise/config\\.toml$/"
 			],
+			"fileFormat": "toml",
 			"datasourceTemplate": "undefined",
 			"matchStrings": [
-				"(?:^|\r\n|\r|\n|$)['\"]?(?<depName>[^_:\\s]+?)['\"]? *= *['\"](?<currentValue>\\d.+?)['\"]"
+				"$each($.tools, function($v, $k) { $contains($k, \":\") ? undefined : { \"depName\": $k, \"currentValue\": $v } })"
 			]
 		},
 		{
-			"customType": "regex",
+			"customType": "jsonata",
 			"description": "Updates min_version in mise config",
-			"fileMatch": [
-				"(^|/)\\.?mise\\.toml$",
-				"(^|/)\\.?mise/config\\.toml$"
+			"managerFilePatterns": [
+				"/(^|/)\\.?mise\\.toml$/",
+				"/(^|/)\\.?mise/config\\.toml$/"
 			],
+			"fileFormat": "toml",
 			"datasourceTemplate": "github-releases",
 			"depNameTemplate": "mise",
 			"packageNameTemplate": "jdx/mise",
 			"matchStrings": [
-				"min_version = \"(?<currentValue>.+)\""
+				"{ \"currentValue\": $.min_version }"
 			]
 		},
 		{
-			"customType": "regex",
+			"customType": "jsonata",
 			"description": "Updates mise versions in GitHub Actions",
-			"fileMatch": [
-				"^\\.github/workflows/.+\\.yml$"
+			"managerFilePatterns": [
+				"/(^|/)(workflow-templates|\\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\\.ya?ml$/",
+				"/(^|/)action\\.ya?ml$/"
 			],
+			"fileFormat": "yaml",
 			"datasourceTemplate": "github-releases",
 			"depNameTemplate": "mise",
 			"packageNameTemplate": "jdx/mise",
 			"matchStrings": [
-				"version: (?<currentValue>.+)"
+				"$.jobs.*.steps[$substringBefore(uses, \"@\") = \"jdx/mise-action\"].with.version.{ \"currentValue\": $ }"
 			]
 		},
 		{
-			"customType": "regex",
-			"fileMatch": [
-				"^\\.github/renovate\\.json5$"
+			"customType": "jsonata",
+			"description": "Updates compatibility_date in wrangler.json",
+			"managerFilePatterns": [
+				"/(^|/)wrangler\\.jsonc?$/"
 			],
+			"fileFormat": "json",
+			"datasourceTemplate": "custom.wrangler-compatibility-date",
+			"depNameTemplate": "compatibility_date",
+			"versioningTemplate": "regex:^(?<minor>[0-9]{4})-(?<patch>[0-9]{2})-(?<build>[0-9]{2})$",
 			"matchStrings": [
-				"github>risu729/renovate-config#(?<currentValue>[0-9.]+)"
+				"{ \"currentValue\": compatibility_date }"
+			]
+		},
+		{
+			"customType": "jsonata",
+			"description": "Updates compatibility_date in wrangler.toml",
+			"managerFilePatterns": [
+				"/(^|/)wrangler\\.toml$/"
 			],
-			"datasourceTemplate": "github-releases",
-			"depNameTemplate": "risu729/renovate-config"
+			"fileFormat": "toml",
+			"datasourceTemplate": "custom.wrangler-compatibility-date",
+			"depNameTemplate": "compatibility_date",
+			"versioningTemplate": "regex:^(?<minor>[0-9]{4})-(?<patch>[0-9]{2})-(?<build>[0-9]{2})$",
+			"matchStrings": [
+				"{ \"currentValue\": compatibility_date }"
+			]
 		}
 	],
+	"customDatasources": {
+		"wrangler-compatibility-date": {
+			"defaultRegistryUrlTemplate": "https://registry.npmjs.org/miniflare",
+			"transformTemplates": [
+				"( \t\t\t\t\t\t$latest := $lookup(versions, `dist-tags`.latest); \t\t\t\t\t\t$transform_version_to_date := \t\t\t\t\t\t\t\t/* use latest major version */ \t\t\t\t\t\t\t\t$match(?, /^4.([0-9]{4})([0-9]{2})([0-9]{2}).[0-9]+$/) \t\t\t\t\t\t\t\t\t\t~> $lookup(?, \"groups\") \t\t\t\t\t\t\t\t\t\t~> $join(?, \"-\"); \t\t\t\t\t\t{ \t\t\t\t\t\t\t\t\"tags\": $each(`dist-tags`, function($version, $key) { \t\t\t\t\t\t\t\t\t\t{ \t\t\t\t\t\t\t\t\t\t\t\t$key: $transform_version_to_date($version) \t\t\t\t\t\t\t\t\t\t} \t\t\t\t\t\t\t\t}) ~> $merge(), \t\t\t\t\t\t\t\t\"homepage\": $exists(homepage) ? homepage : $latest.homepage, \t\t\t\t\t\t\t\t\"sourceUrl\": $exists(repository.url) ? repository.url : $latest.repository.url, \t\t\t\t\t\t\t\t\"releases\": $each(versions, function($data, $version) { \t\t\t\t\t\t\t\t\t\t{ \t\t\t\t\t\t\t\t\t\t\t\t\"version\": $transform_version_to_date($version), \t\t\t\t\t\t\t\t\t\t\t\t\"gitRef\": $data.gitHead, \t\t\t\t\t\t\t\t\t\t\t\t\"releaseTimestamp\": $lookup(time, $version), \t\t\t\t\t\t\t\t\t\t\t\t\"sourceUrl\": $data.repository.url != repository.url ? $data.repository.url \t\t\t\t\t\t\t\t\t\t} \t\t\t\t\t\t\t\t}) ~> $filter(function($data) { \t\t\t\t\t\t\t\t\t\t$exists($data.version) \t\t\t\t\t\t\t\t}) ~> $sort(function($left, $right) { \t\t\t\t\t\t\t\t\t\t/* sort from latest to oldest */ \t\t\t\t\t\t\t\t\t\t$toMillis($left.releaseTimestamp) < $toMillis($right.releaseTimestamp) \t\t\t\t\t\t\t\t}) ~> $reduce(function($acc, $data) { \t\t\t\t\t\t\t\t\t\t/* only keep the latest version for each date */ \t\t\t\t\t\t\t\t\t\t$lookup($acc, $data.version) ? $acc : $merge([$acc, { $data.version: $data }]) \t\t\t\t\t\t\t\t}, []) ~> $each(function($data) { $data }) \t\t\t\t\t\t\t\t\t/* sort from oldest to latest */ \t\t\t\t\t\t\t\t\t~> $reverse() \t\t\t\t\t\t} \t\t\t\t)"
+			]
+		}
+	},
 	"packageRules": [
 		{
 			"matchDepNames": [
@@ -103,7 +132,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"cargo-binstall"
@@ -112,7 +141,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"taplo"
@@ -122,7 +151,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"biome"
@@ -133,7 +162,7 @@
 		},
 		{
 			"matchManagers": [
-				"custom.regex"
+				"custom.jsonata"
 			],
 			"matchDepNames": [
 				"lychee"
@@ -141,6 +170,39 @@
 			"overrideDatasource": "github-releases",
 			"overridePackageName": "lycheeverse/lychee",
 			"extractVersion": "^lychee-v(?<version>.+)"
+		},
+		{
+			"matchManagers": [
+				"custom.jsonata"
+			],
+			"matchDepNames": [
+				"ghalint"
+			],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "suzuki-shunsuke/ghalint",
+			"extractVersion": "^v(?<version>.+)"
+		},
+		{
+			"matchManagers": [
+				"custom.jsonata"
+			],
+			"matchDepNames": [
+				"pinact"
+			],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "suzuki-shunsuke/pinact",
+			"extractVersion": "^v(?<version>.+)"
+		},
+		{
+			"matchManagers": [
+				"custom.jsonata"
+			],
+			"matchDepNames": [
+				"jc"
+			],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "kellyjonbrazil/jc",
+			"extractVersion": "^v(?<version>.+)"
 		}
 	]
 }

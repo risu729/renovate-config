@@ -10,7 +10,9 @@
 		"ignoreUnknown": true,
 		"ignore": [
 			// ignore auto-generated files
-			"default.json"
+			"default.json",
+			// ignore test fixtures
+			"test/fixtures/**"
 		]
 	},
 	"formatter": {
