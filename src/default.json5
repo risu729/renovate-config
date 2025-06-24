@@ -192,7 +192,7 @@
 			matchDepNames: ["biome"],
 			overrideDatasource: "github-releases",
 			overridePackageName: "biomejs/biome",
-			extractVersion: "^cli/v(?<version>.+)",
+			extractVersion: "^@biomejs/biome@(?<version>.+)",
 		},
 		{
 			matchManagers: ["custom.jsonata"],
