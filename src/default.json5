@@ -228,6 +228,6 @@
 		{
 			matchDepNames: ["biome", "@biomejs/biome"],
 			groupName: "biome",
-		}
+		},
 	],
 }
