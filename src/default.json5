@@ -225,5 +225,9 @@
 			overridePackageName: "kellyjonbrazil/jc",
 			extractVersion: "^v(?<version>.+)",
 		},
+		{
+			matchDepNames: ["biome", "@biomejs/biome"],
+			groupName: "biome",
+		}
 	],
 }
