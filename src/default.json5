@@ -231,7 +231,7 @@
 			overrideDatasource: "github-releases",
 			overridePackageName: "PowerShell/PowerShell",
 			extractVersion: "^v(?<version>.+)",
-		}
+		},
 		{
 			matchDepNames: ["biome", "@biomejs/biome"],
 			groupName: "biome",
