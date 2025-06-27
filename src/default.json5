@@ -226,6 +226,13 @@
 			extractVersion: "^v(?<version>.+)",
 		},
 		{
+			matchManagers: ["custom.jsonata"],
+			matchDepNames: ["powershell"],
+			overrideDatasource: "github-releases",
+			overridePackageName: "PowerShell/PowerShell",
+			extractVersion: "^v(?<version>.+)",
+		}
+		{
 			matchDepNames: ["biome", "@biomejs/biome"],
 			groupName: "biome",
 		},
