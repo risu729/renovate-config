@@ -226,6 +226,11 @@
 			extractVersion: "^v(?<version>.+)",
 		},
 		{
+			matchManagers: ["custom.jsonata"],
+			matchDepNames: ["cspell", "json5", "prettier"],
+			overrideDatasource: "npm",
+		},
+		{
 			matchDepNames: ["biome", "@biomejs/biome"],
 			groupName: "biome",
 		},
