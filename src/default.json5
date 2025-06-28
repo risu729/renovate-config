@@ -227,6 +227,13 @@
 		},
 		{
 			matchManagers: ["custom.jsonata"],
+			matchDepNames: ["powershell"],
+			overrideDatasource: "github-releases",
+			overridePackageName: "PowerShell/PowerShell",
+			extractVersion: "^v(?<version>.+)",
+		},
+		{
+			matchManagers: ["custom.jsonata"],
 			matchDepNames: ["cspell", "json5", "prettier"],
 			overrideDatasource: "npm",
 		},
