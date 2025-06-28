@@ -4,13 +4,13 @@
  * @type {import("semantic-release").Options}
  */
 const config = {
-	// biome-ignore lint/nursery/noTemplateCurlyInString: semantic-release uses lodash template
-	tagFormat: "${version}",
 	plugins: [
 		"@semantic-release/commit-analyzer",
 		"@semantic-release/release-notes-generator",
 		"@semantic-release/github",
 	],
+	// biome-ignore lint/suspicious/noTemplateCurlyInString: semantic-release uses lodash template
+	tagFormat: "${version}",
 };
 
 export default config;

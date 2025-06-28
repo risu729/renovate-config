@@ -6,11 +6,8 @@
  * @type {import("@cspell/cspell-types").CSpellUserSettings}
  */
 module.exports = {
-	version: "0.2",
-	language: "en",
 	dictionaries: ["typescript", "node", "npm", "bash", "markdown"],
 	enableGlobDot: true,
-	useGitignore: true,
 	ignorePaths: [
 		".git/",
 		// ignore auto-generated files
@@ -23,6 +20,9 @@ module.exports = {
 		"test/fixtures/",
 		"test/__snapshots__/",
 	],
+	language: "en",
+	useGitignore: true,
+	version: "0.2",
 	words: [
 		"risu",
 		"biomejs",
