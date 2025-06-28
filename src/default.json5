@@ -233,7 +233,7 @@
 			extractVersion: "^v(?<version>.+)",
 		},
 		{
-			matchManagers: ["custom.jsonata
+			matchManagers: ["custom.jsonata"],
 			matchDepNames: ["cspell", "json5", "prettier"],
 			overrideDatasource: "npm",
 		},
