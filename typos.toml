@@ -3,3 +3,8 @@
 [files]
 ignore-hidden = false
 extend-exclude = [".git", "test/fixtures", "test/__snapshots__"]
+
+[default.extend-words]
+# typo but used in Biome
+# ref: https://biomejs.dev/linter/rules/no-inferrable-types/
+inferrable = "inferrable"
