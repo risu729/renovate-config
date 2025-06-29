@@ -11,7 +11,7 @@
 		"commitizen": "4.3.1",
 		"jsonata": "2.0.6",
 		"prettier": "3.6.2",
-		"semantic-release": "24.2.5",
+		"semantic-release": "24.2.6",
 		"typescript": "5.8.3"
 	},
 	"name": "@risu729/renovate-config"
