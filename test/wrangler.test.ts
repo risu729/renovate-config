@@ -4,6 +4,7 @@ import config from "../default.json" with { type: "json" };
 // cspell:ignore miniflare
 import response from "./fixtures/npm-registry-miniflare.json" with {
 	type: "json",
+	type: "json",
 };
 
 test("wrangler-compatibility-date JSONata expression", async () => {
