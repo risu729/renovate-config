@@ -5,6 +5,7 @@ import config from "../default.json" with { type: "json" };
 import response from "./fixtures/npm-registry-miniflare.json" with {
 	type: "json",
 	type: "json",
+	type: "json",
 };
 
 test("wrangler-compatibility-date JSONata expression", async () => {
