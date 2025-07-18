@@ -16,7 +16,7 @@ taplo = "0.10.0"
 yamlfmt = "0.17.2"
 # cspell:ignore pipx
 # required for pipx backend
-uv = "0.7.22"
+uv = "0.8.0"
 yamllint = "1.37.1"
 "npm:renovate" = "41.37.11"
 "npm:cspell" = "9.1.5"
