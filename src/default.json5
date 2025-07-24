@@ -74,7 +74,7 @@
 			depNameTemplate: "mise",
 			packageNameTemplate: "jdx/mise",
 			matchStrings: [
-				'$.jobs.*.steps[$substringBefore(uses, "@") = "jdx/mise-action"].with.version.{ "currentValue": $ }',
+				'$.jobs.*.steps[$substringBefore(uses, "@") = "jdx/mise-action"].with.{ "currentValue": version, "currentDigest": sha256 }',
 			],
 		},
 		{
