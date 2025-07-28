@@ -59,7 +59,7 @@
 				"/(^|/)action\\.ya?ml$/"
 			],
 			"fileFormat": "yaml",
-			"datasourceTemplate": "github-releases",
+			"datasourceTemplate": "github-release-attachments",
 			"depNameTemplate": "mise",
 			"packageNameTemplate": "jdx/mise",
 			"matchStrings": [
