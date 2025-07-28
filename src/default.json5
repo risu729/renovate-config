@@ -12,16 +12,6 @@
 		"customManagers:biomeVersions",
 	],
 	ignorePresets: [":ignoreModulesAndTests"],
-	bun: {
-		ignorePaths: [
-			// ignorePaths is not merged
-			// ref: https://docs.renovatebot.com/configuration-options/#ignorepaths
-			"**/node_modules/**",
-			// ignore bun.lockb
-			// an empty bun.lockb is required to Bun detected by Cloudflare Workers/Pages Builds
-			"**/bun.lockb",
-		],
-	},
 	labels: [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}",

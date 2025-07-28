@@ -12,12 +12,6 @@
 	"ignorePresets": [
 		":ignoreModulesAndTests"
 	],
-	"bun": {
-		"ignorePaths": [
-			"**/node_modules/**",
-			"**/bun.lockb"
-		]
-	},
 	"labels": [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}"
