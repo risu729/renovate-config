@@ -15,7 +15,7 @@
 			// ignore auto-generated files
 			"!default.json",
 			// ignore test fixtures
-			"!test/fixtures/**"
+			"!test/fixtures"
 		]
 	},
 	"formatter": {
