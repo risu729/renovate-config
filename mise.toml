@@ -28,6 +28,7 @@ json5 = "2.2.3"
 
 [settings]
 experimental = true
+auto_install_disable_tools = ["npm:renovate"]
 
 [settings.npm]
 bun = true
