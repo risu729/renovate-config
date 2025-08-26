@@ -87,6 +87,19 @@
 			"matchStrings": [
 				"{ \"currentValue\": compatibility_date }"
 			]
+		},
+		{
+			"customType": "jsonata",
+			"description": "Updates dist version in dist.toml",
+			"managerFilePatterns": [
+				"/(^|/)dist(?:-workspace)?\\.toml$/"
+			],
+			"fileFormat": "toml",
+			"datasourceTemplate": "cargo",
+			"depNameTemplate": "cargo-dist",
+			"matchStrings": [
+				"{ \"currentValue\": $.dist.\"cargo-dist-version\" }"
+			]
 		}
 	],
 	"customDatasources": {
