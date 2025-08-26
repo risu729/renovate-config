@@ -95,7 +95,7 @@
 			datasourceTemplate: "cargo",
 			depNameTemplate: "cargo-dist",
 			matchStrings: ['{ "currentValue": $.dist."cargo-dist-version" }'],
-		}
+		},
 	],
 	customDatasources: {
 		// Renovate does not support transformation of datasource versions, so custom datasource is needed
