@@ -92,7 +92,7 @@
 			description: "Updates dist version in dist.toml",
 			managerFilePatterns: ["/(^|/)dist(?:-workspace)?\\.toml$/"],
 			fileFormat: "toml",
-			datasourceTemplate: "cargo",
+			datasourceTemplate: "crate",
 			depNameTemplate: "cargo-dist",
 			matchStrings: ['{ "currentValue": $.dist."cargo-dist-version" }'],
 		},
