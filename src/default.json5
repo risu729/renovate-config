@@ -240,5 +240,9 @@
 			matchDepNames: ["biome", "@biomejs/biome"],
 			groupName: "biome",
 		},
+		{
+			matchDepNames: ["cargo-dist", "aqua:axodotdev/cargo-dist"],
+			groupName: "cargo-dist",
+		},
 	],
 }
