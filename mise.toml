@@ -18,7 +18,7 @@ yamlfmt = "0.17.2"
 # required for pipx backend
 uv = "0.8.19"
 yamllint = "1.37.1"
-"npm:renovate" = "41.118.1"
+"npm:renovate" = "41.119.4"
 cspell = "9.2.1"
 lychee = "0.20.1"
 typos = "1.36.2"
