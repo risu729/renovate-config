@@ -13,7 +13,7 @@ ghalint = "1.5.3"
 pinact = "3.4.2"
 taplo = "0.10.0"
 prettier = "3.6.2"
-yamlfmt = "0.18.0"
+yamlfmt = "0.18.1"
 # cspell:ignore pipx
 # required for pipx backend
 uv = "0.9.3"
