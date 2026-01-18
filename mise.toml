@@ -12,7 +12,7 @@ shellcheck = "0.11.0"
 ghalint = "1.5.4"
 pinact = "3.8.0"
 taplo = "0.10.0"
-prettier = "3.7.4"
+prettier = "3.8.0"
 yamlfmt = "0.21.0"
 # cspell:ignore pipx
 # required for pipx backend
