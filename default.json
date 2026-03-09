@@ -151,32 +151,11 @@
 				"custom.jsonata"
 			],
 			"matchDepNames": [
-				"taplo"
-			],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "tamasfe/taplo"
-		},
-		{
-			"matchManagers": [
-				"custom.jsonata"
-			],
-			"matchDepNames": [
 				"biome"
 			],
 			"overrideDatasource": "github-releases",
 			"overridePackageName": "biomejs/biome",
 			"extractVersion": "^@biomejs/biome@(?<version>.+)"
-		},
-		{
-			"matchManagers": [
-				"custom.jsonata"
-			],
-			"matchDepNames": [
-				"lychee"
-			],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "lycheeverse/lychee",
-			"extractVersion": "^lychee-v(?<version>.+)"
 		},
 		{
 			"matchManagers": [
