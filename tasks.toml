@@ -88,7 +88,7 @@ depends_post = [
 ["buni"]
 run = "bun install --frozen-lockfile"
 
-["util:nodiff"] 
+["util:nodiff"]
 run = ["git add .", "git diff --staged --exit-code"]
 hide = true
 
