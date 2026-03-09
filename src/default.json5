@@ -210,7 +210,7 @@
 		},
 		{
 			matchManagers: ["custom.jsonata"],
-			matchDepNames: ["cspell", "json5", "prettier"],
+			matchDepNames: ["cspell", "json5", "prettier", "oxlint", "oxfmt"],
 			overrideDatasource: "npm",
 		},
 		{

@@ -210,7 +210,9 @@
 			"matchDepNames": [
 				"cspell",
 				"json5",
-				"prettier"
+				"prettier",
+				"oxlint",
+				"oxfmt"
 			],
 			"overrideDatasource": "npm"
 		},
