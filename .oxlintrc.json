@@ -1,0 +1,21 @@
+{
+	"$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/npm/oxlint/configuration_schema.json",
+	"plugins": ["import", "jsdoc", "node", "promise"],
+	"categories": {
+		"correctness": "error",
+		"nursery": "error",
+		"pedantic": "error",
+		"perf": "error",
+		"restriction": "error",
+		"style": "error",
+		"suspicious": "error"
+	},
+	"rules": {
+		"eslint/no-magic-numbers": "allow",
+		"eslint/no-ternary": "allow",
+		// oxfmt and oxlint sort seems to conflict
+		"eslint/sort-imports": "allow",
+		"import/no-default-export": "allow",
+		"import/unambiguous": "allow"
+	}
+}

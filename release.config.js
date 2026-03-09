@@ -1,4 +1,4 @@
-// ref: https://semantic-release.gitbook.io/semantic-release/usage/configuration
+// Ref: https://semantic-release.gitbook.io/semantic-release/usage/configuration
 
 /**
  * @type {import("semantic-release").Options}
@@ -9,7 +9,7 @@ const config = {
 		"@semantic-release/release-notes-generator",
 		"@semantic-release/github",
 	],
-	// biome-ignore lint/suspicious/noTemplateCurlyInString: semantic-release uses lodash template
+	// oxlint-disable-next-line eslint/no-template-curly-in-string
 	tagFormat: "${version}",
 };
 
