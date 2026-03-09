@@ -4,7 +4,6 @@
 	extends: [
 		"config:best-practices",
 		":pinVersions",
-		// cspell:ignore automerge
 		":automergeMinor",
 		":automergeDigest",
 		":prHourlyLimitNone",
@@ -55,7 +54,6 @@
 			description: "Updates mise versions in GitHub Actions",
 			managerFilePatterns: [
 				// ref: https://docs.renovatebot.com/modules/manager/github-actions/#file-matching
-				// cspell:ignore gitea forgejo
 				"/(^|/)(workflow-templates|\\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\\.ya?ml$/",
 				"/(^|/)action\\.ya?ml$/",
 			],
@@ -101,13 +99,11 @@
 		// Renovate does not support transformation of datasource versions, so custom datasource is needed
 		// ref: https://github.com/renovatebot/renovate/discussions/34671
 		"wrangler-compatibility-date": {
-			// cspell:ignore miniflare
 			// compatibility_date is updated to the date of the release of miniflare
 			// ref: https://github.com/cloudflare/workers-sdk/blob/4ad6a6dbe84909ef687f4d05f1a7a4c2719859d6/packages/miniflare/src/plugins/core/index.ts#L371-L385
 			// minor version is the date in YYYYMMDD format
 			defaultRegistryUrlTemplate: "https://registry.npmjs.org/miniflare",
 			transformTemplates: [
-				// cspell:ignore millis
 				'( \
 						$latest := $lookup(versions, `dist-tags`.latest); \
 						$transform_version_to_date := \
@@ -157,7 +153,6 @@
 		// automerge
 		{
 			matchDepNames: ["mise"],
-			// cspell:ignore calver
 			// mise uses Calver, so allow automerge for all versions
 			// ref: https://mise.jdx.dev/roadmap.html#versioning
 			automerge: true,
@@ -175,8 +170,7 @@
 		// mise tools
 		{
 			matchManagers: ["custom.jsonata"],
-			// cspell:ignore binstall
-			matchDepNames: ["cargo-binstall", "cargo-dist"],
+			matchDepNames: ["cargo-binstall", "cargo-dist", "release-plz"],
 			overrideDatasource: "crate",
 		},
 		{
@@ -190,7 +184,6 @@
 			matchManagers: ["custom.jsonata"],
 			matchDepNames: ["ghalint"],
 			overrideDatasource: "github-releases",
-			// cspell:ignore shunsuke
 			overridePackageName: "suzuki-shunsuke/ghalint",
 			extractVersion: "^v(?<version>.+)",
 		},
@@ -205,7 +198,6 @@
 			matchManagers: ["custom.jsonata"],
 			matchDepNames: ["jc"],
 			overrideDatasource: "github-releases",
-			// cspell:ignore kellyjonbrazil
 			overridePackageName: "kellyjonbrazil/jc",
 			extractVersion: "^v(?<version>.+)",
 		},
