@@ -176,7 +176,7 @@
 		{
 			matchManagers: ["custom.jsonata"],
 			// cspell:ignore binstall
-			matchDepNames: ["cargo-binstall"],
+			matchDepNames: ["cargo-binstall", "cargo-dist"],
 			overrideDatasource: "crate",
 		},
 		{
@@ -239,11 +239,6 @@
 		{
 			matchDepNames: ["biome", "@biomejs/biome"],
 			groupName: "biome",
-		},
-		{
-			// cspell:ignore axodotdev
-			matchDepNames: ["cargo-dist", "aqua:axodotdev/cargo-dist"],
-			groupName: "cargo-dist",
 		},
 	],
 }

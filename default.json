@@ -142,7 +142,8 @@
 				"custom.jsonata"
 			],
 			"matchDepNames": [
-				"cargo-binstall"
+				"cargo-binstall",
+				"cargo-dist"
 			],
 			"overrideDatasource": "crate"
 		},
@@ -239,13 +240,6 @@
 				"@biomejs/biome"
 			],
 			"groupName": "biome"
-		},
-		{
-			"matchDepNames": [
-				"cargo-dist",
-				"aqua:axodotdev/cargo-dist"
-			],
-			"groupName": "cargo-dist"
 		}
 	]
 }
