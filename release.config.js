@@ -1,4 +1,4 @@
-// ref: https://semantic-release.gitbook.io/semantic-release/usage/configuration
+// Ref: https://semantic-release.gitbook.io/semantic-release/usage/configuration
 
 /**
  * @type {import("semantic-release").Options}
@@ -9,6 +9,7 @@ const config = {
 		"@semantic-release/release-notes-generator",
 		"@semantic-release/github",
 	],
+	// oxlint-disable-next-line eslint/no-template-curly-in-string
 	tagFormat: "${version}",
 };
 

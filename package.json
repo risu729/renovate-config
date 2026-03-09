@@ -1,5 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@risu729/renovate-config",
 	"devDependencies": {
 		"@commitlint/cli": "20.4.3",
 		"@commitlint/config-conventional": "20.4.3",
@@ -11,6 +12,5 @@
 		"jsonata": "2.1.0",
 		"semantic-release": "25.0.3",
 		"typescript": "5.9.3"
-	},
-	"name": "@risu729/renovate-config"
+	}
 }
