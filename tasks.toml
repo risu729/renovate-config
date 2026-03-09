@@ -22,8 +22,11 @@ depends_post = [
 depends = ["build", "buni"]
 run = "bun test"
 
-["check:biome"]
-run = "biome {% if env.LINT is undefined %}check --write{% else %}ci{% endif %} --error-on-warnings"
+["check:oxlint"]
+run = "oxlint --report-unused-disable-directives-severity error {% if env.LINT is undefined %}--fix{% endif %}"
+
+["check:oxfmt"]
+run = "oxfmt {% if env.LINT is defined %}--check{% endif %}"
 
 ["check:tsc"]
 depends = ["buni"]
@@ -51,11 +54,6 @@ run = [
 	"taplo lint",
 	"taplo fmt {% if env.LINT is defined %}--check --diff{% endif %}",
 ]
-
-["check:prettier"]
-run = """
-prettier {% if env.LINT is undefined %}--write{% else %}--check{% endif %} \
-	{% if env.CI is undefined %}--cache{% endif %} ."""
 
 ["check:yamlfmt"]
 run = "yamlfmt {% if env.LINT is defined %}-lint{% endif %} ."

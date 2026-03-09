@@ -9,7 +9,6 @@ const config = {
 		"@semantic-release/release-notes-generator",
 		"@semantic-release/github",
 	],
-	// biome-ignore lint/suspicious/noTemplateCurlyInString: semantic-release uses lodash template
 	tagFormat: "${version}",
 };
 
