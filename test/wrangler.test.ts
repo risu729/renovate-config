@@ -1,7 +1,6 @@
 import { expect, test } from "bun:test";
 import jsonata from "jsonata";
 import config from "../default.json" with { type: "json" };
-// cspell:ignore miniflare
 import response from "./fixtures/npm-registry-miniflare.json" with {
 	type: "json",
 };
