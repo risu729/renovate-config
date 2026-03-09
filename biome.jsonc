@@ -91,7 +91,6 @@
 				"noParameterProperties": "on",
 				"noProcessEnv": "on",
 				"noRestrictedGlobals": "on",
-				// cspell:ignore shouty
 				"noShoutyConstants": "on",
 				"noSubstr": "on",
 				"noUnusedTemplateLiteral": "on",
@@ -112,7 +111,6 @@
 				"useEnumInitializers": "on",
 				"useExplicitLengthCheck": "on",
 				"useExportsLast": "on",
-				// cspell:ignore filenaming
 				"useFilenamingConvention": "on",
 				"useForOf": "on",
 				"useGroupedAccessorPairs": "on",

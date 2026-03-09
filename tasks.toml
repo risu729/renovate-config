@@ -71,9 +71,6 @@ run = [
 	"renovate-config-validator --strict default.json",
 ]
 
-["check:cspell"]
-run = "cspell {% if env.CI is undefined %}--cache{% endif %} \"**/*\""
-
 ["check:lychee"]
 run = """
 lychee {% if env.LINT is defined %}--verbose{% endif %} \
@@ -91,11 +88,10 @@ depends_post = [
 ["buni"]
 run = "bun install --frozen-lockfile"
 
-["util:nodiff"] # cspell:ignore nodiff
+["util:nodiff"] 
 run = ["git add .", "git diff --staged --exit-code"]
 hide = true
 
-# cspell:ignore donothing
 ["util:donothing"]
 run = ""
 hide = true
