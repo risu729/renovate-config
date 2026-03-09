@@ -176,7 +176,7 @@
 		{
 			matchManagers: ["custom.jsonata"],
 			// cspell:ignore binstall
-			matchDepNames: ["cargo-binstall", "cargo-dist"],
+			matchDepNames: ["cargo-binstall", "cargo-dist", "release-plz"],
 			overrideDatasource: "crate",
 		},
 		{
