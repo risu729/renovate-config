@@ -147,7 +147,8 @@
 			"matchDepNames": [
 				"cargo-binstall",
 				"cargo-dist",
-				"release-plz"
+				"release-plz",
+				"pitchfork"
 			],
 			"overrideDatasource": "crate"
 		},
