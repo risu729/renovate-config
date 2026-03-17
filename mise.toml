@@ -15,7 +15,7 @@ pinact = "3.9.0"
 taplo = "0.10.0"
 yamlfmt = "0.21.0"
 # required for pipx backend
-uv = "0.10.10"
+uv = "0.10.11"
 yamllint = "1.38.0"
 "npm:renovate" = "43.66.5"
 lychee = "0.23.0"
