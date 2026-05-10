@@ -34,6 +34,21 @@
 			]
 		},
 		{
+			"customType": "regex",
+			"description": "Updates hk Pkl package imports",
+			"managerFilePatterns": [
+				"/(^|/)hk\\.pkl$/"
+			],
+			"datasourceTemplate": "github-releases",
+			"depNameTemplate": "hk",
+			"packageNameTemplate": "jdx/hk",
+			"extractVersionTemplate": "^v(?<version>.+)$",
+			"matchStrings": [
+				"package://github\\.com/jdx/hk/releases/download/v(?<currentValue>[^/]+)/hk@[^#]+#"
+			],
+			"autoReplaceStringTemplate": "package://github.com/jdx/hk/releases/download/v{{{newValue}}}/hk@{{{newValue}}}#"
+		},
+		{
 			"customType": "jsonata",
 			"description": "Updates min_version in mise config",
 			"managerFilePatterns": [
@@ -167,6 +182,17 @@
 				"custom.jsonata"
 			],
 			"matchDepNames": [
+				"hk"
+			],
+			"overrideDatasource": "github-releases",
+			"overridePackageName": "jdx/hk",
+			"extractVersion": "^v(?<version>.+)"
+		},
+		{
+			"matchManagers": [
+				"custom.jsonata"
+			],
+			"matchDepNames": [
 				"ghalint"
 			],
 			"overrideDatasource": "github-releases",
@@ -225,6 +251,12 @@
 				"@biomejs/biome"
 			],
 			"groupName": "biome"
+		},
+		{
+			"matchDepNames": [
+				"hk"
+			],
+			"groupName": "hk"
 		}
 	]
 }
