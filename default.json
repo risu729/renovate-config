@@ -64,21 +64,6 @@
 			"autoReplaceStringTemplate": "https://raw.githubusercontent.com/risu729/hk-config/v{{{newValue}}}/"
 		},
 		{
-			"customType": "regex",
-			"description": "Updates risu729 hk-config dogfood version",
-			"managerFilePatterns": [
-				"/(^|/)\\.preset-version$/"
-			],
-			"datasourceTemplate": "github-releases",
-			"depNameTemplate": "hk-config",
-			"packageNameTemplate": "risu729/hk-config",
-			"extractVersionTemplate": "^v(?<version>.+)$",
-			"matchStrings": [
-				"^v(?<currentValue>.+)$"
-			],
-			"autoReplaceStringTemplate": "v{{{newValue}}}"
-		},
-		{
 			"customType": "jsonata",
 			"description": "Updates min_version in mise config",
 			"managerFilePatterns": [
