@@ -17,8 +17,6 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: write # for GitHub Release
-      issues: write # for commenting on issues
-      pull-requests: write # for commenting on pull requests
 
     steps:
       - name: Checkout
