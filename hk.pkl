@@ -19,9 +19,22 @@ hooks = helpers.standardHooks((picked) {
     fix = "mise run build"
     exclusive = true // keep generated output stable before other steps inspect it
   }
-  ["renovate-config-validator"] = new Step {
-    glob = List("src/default.json5", "default.json")
-    depends = List("build")
-    check = "renovate-config-validator --strict && renovate-config-validator --strict src/default.json5 && renovate-config-validator --strict default.json"
+  ["renovate-config-validator"] = new Group {
+    steps {
+      ["renovate-config-validator:repo"] = new Step {
+        glob = List(".github/renovate.json5")
+        check = "renovate-config-validator --strict"
+      }
+      ["renovate-config-validator:src"] = new Step {
+        glob = List("src/default.json5")
+        depends = List("build")
+        check = "renovate-config-validator --strict src/default.json5"
+      }
+      ["renovate-config-validator:default"] = new Step {
+        glob = List("default.json")
+        depends = List("build")
+        check = "renovate-config-validator --strict default.json"
+      }
+    }
   }
 })
