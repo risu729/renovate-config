@@ -20,6 +20,6 @@ hooks = helpers.standardHooks((picked) {
   ["renovate-config-validator"] = new Step {
     glob = List("src/default.json5", "default.json")
     depends = List("build")
-    check = "mise x npm:renovate -- renovate-config-validator --strict && mise x npm:renovate -- renovate-config-validator --strict src/default.json5 && mise x npm:renovate -- renovate-config-validator --strict default.json"
+    check = "renovate-config-validator --strict && renovate-config-validator --strict src/default.json5 && renovate-config-validator --strict default.json"
   }
 })
