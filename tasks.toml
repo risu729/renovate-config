@@ -15,16 +15,9 @@ description = "Build default.json from src/default.json5."
 
 ["build:diff"]
 run = """
-tmp=$(mktemp)
-trap 'rm -f "$tmp"' EXIT
-json5 src/default.json5 --out-file "$tmp" --space t
-printf '\\n' >> "$tmp"
-if ! diff_output=$(diff -u default.json "$tmp"); then
-  printf '%s\\n' "$diff_output" | sed \
-    -e '1s|^--- .*|--- a/default.json|' \
-    -e '2s|^+++ .*|+++ b/default.json|'
-  exit 1
-fi
+json5 src/default.json5 --space t \
+  | awk '{ print }' \
+  | diff -u --label a/default.json --label b/default.json default.json -
 """
 description = "Print a patch when default.json is not up to date."
 
