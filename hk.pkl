@@ -1,0 +1,25 @@
+amends "https://raw.githubusercontent.com/risu729/hk-config/v1.0.0/presets.pkl"
+import "https://raw.githubusercontent.com/risu729/hk-config/v1.0.0/helpers.pkl"
+
+local picked = helpers.pick(new Listing {
+  "github-actions"
+  "tombi"
+  "yaml"
+  "typos"
+  "hygiene"
+})
+
+hooks = helpers.standardHooks((picked) {
+  ["build"] = new Step {
+    glob = List("src/default.json5", "default.json")
+    check =
+      "tmp=$(mktemp) && trap 'rm -f \"$tmp\"' EXIT && json5 src/default.json5 --out-file \"$tmp\" --space t && printf '\\n' >> \"$tmp\" && diff -u default.json \"$tmp\""
+    fix = "mise run build"
+    exclusive = true // keep generated output stable before other steps inspect it
+  }
+  ["renovate-config-validator"] = new Step {
+    glob = List("src/default.json5", "default.json")
+    depends = List("build")
+    check = "mise x npm:renovate -- renovate-config-validator --strict && mise x npm:renovate -- renovate-config-validator --strict src/default.json5 && mise x npm:renovate -- renovate-config-validator --strict default.json"
+  }
+})
