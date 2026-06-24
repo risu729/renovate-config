@@ -1,95 +1,27 @@
 # ref: https://mise.jdx.dev/tasks/
 #:schema https://mise.jdx.dev/schema/mise-task.json
 
-[commit]
-depends = ["buni"]
-run = [
-	"{% if flag(name='staged') == 'false' %}git add .{% endif %}",
-	"bun run git-cz",
-]
-raw = true
-
 [check]
-depends = ["build", "check:*"]
+usage = '''
+flag "--lint" help="Run hk check instead of fix"
+'''
+run = "hk {% if usage.lint %}check{% else %}fix{% endif %} --all --no-progress --no-fail-fast"
+env.GH_TOKEN = "{% if env.GITHUB_TOKEN is defined %}{{ env.GITHUB_TOKEN }}{% endif %}"
+description = "Run hk linters and formatters."
 
-["build"]
-run = "json5 src/default.json5 --out-file default.json --space t"
-depends_post = [
-	"{% if env.CI is defined %}util:nodiff{% else %}util:donothing{% endif %}",
-]
+[build]
+run = "json5 src/default.json5 --out-file default.json --space t && printf '\\n' >> default.json"
+description = "Build default.json from src/default.json5."
+
+["build:diff"]
+run = """
+json5 src/default.json5 --space t \
+  | awk '{ print }' \
+  | diff -u --label a/default.json --label b/default.json default.json -
+"""
+description = "Print a patch when default.json is not up to date."
 
 ["test"]
-depends = ["build", "buni"]
-run = "bun test"
-
-["check:oxlint"]
-run = "oxlint --report-unused-disable-directives-severity error {% if env.LINT is undefined %}--fix{% endif %}"
-
-["check:oxfmt"]
-run = "oxfmt {% if env.LINT is defined %}--check{% endif %}"
-
-["check:tsc"]
-depends = ["buni"]
-run = "bun run tsc {% if env.CI is defined %}--incremental false{% endif %}"
-
-["check:jsonschema"]
-run = "jschema-validator"
-
-["check:actionlint"]
-run = "actionlint -color"
-# SC2312: check-extra-masked-returns
-# pipefail is set by shell: bash in GitHub Actions but cannot be detected by shellcheck
-# ref: https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#defaultsrunshell
-env = { "SHELLCHECK_OPTS" = "--enable=all --exclude=SC2312" }
-
-["check:ghalint"]
-wait_for = ["check:pinact"]
-run = "ghalint run"
-
-["check:pinact"]
-run = "pinact run --verify {% if env.LINT is defined %}--check{% endif %}"
-
-["check:taplo"]
-run = [
-	"taplo lint",
-	"taplo fmt {% if env.LINT is defined %}--check --diff{% endif %}",
-]
-
-["check:yamlfmt"]
-run = "yamlfmt {% if env.LINT is defined %}-lint{% endif %} ."
-
-["check:yamllint"]
-run = "yamllint --strict ."
-
-["check:renovate"]
 depends = ["build"]
-run = [
-	"renovate-config-validator --strict",
-	"renovate-config-validator --strict src/default.json5",
-	"renovate-config-validator --strict default.json",
-]
-
-["check:lychee"]
-run = """
-lychee {% if env.LINT is defined %}--verbose{% endif %} \
-	{% if env.CI is undefined %}--cache{% endif %} \"**/*\""""
-
-["check:typos"]
-run = "typos {% if env.LINT is undefined %}--write-changes{% endif %}"
-
-["check:ignore-sync"]
-run = "ignore-sync ."
-depends_post = [
-	"{% if env.CI is defined %}util:nodiff{% else %}util:donothing{% endif %}",
-]
-
-["buni"]
-run = "bun install --frozen-lockfile"
-
-["util:nodiff"]
-run = ["git add .", "git diff --staged --exit-code"]
-hide = true
-
-["util:donothing"]
-run = ""
-hide = true
+run = "bun test"
+description = "Run tests."
