@@ -43,6 +43,6 @@ run = "bun install --frozen-lockfile"
 [hooks]
 postinstall = """
 {% if env.CI is undefined %}
-  mise deps
+  hk install --mise
 {% endif %}
 """
