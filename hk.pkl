@@ -12,8 +12,7 @@ local picked = helpers.pick(new Listing {
 hooks = helpers.standardHooks((picked) {
   ["build"] = new Step {
     glob = List("src/default.json5", "default.json")
-    check =
-      "tmp=$(mktemp) && trap 'rm -f \"$tmp\"' EXIT && json5 src/default.json5 --out-file \"$tmp\" --space t && printf '\\n' >> \"$tmp\" && diff -u default.json \"$tmp\""
+    check_diff = "mise run build:diff"
     fix = "mise run build"
     exclusive = true // keep generated output stable before other steps inspect it
   }

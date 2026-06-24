@@ -13,6 +13,21 @@ description = "Run hk linters and formatters."
 run = "json5 src/default.json5 --out-file default.json --space t && printf '\\n' >> default.json"
 description = "Build default.json from src/default.json5."
 
+["build:diff"]
+run = """
+tmp=$(mktemp)
+trap 'rm -f "$tmp"' EXIT
+json5 src/default.json5 --out-file "$tmp" --space t
+printf '\\n' >> "$tmp"
+if ! diff_output=$(diff -u default.json "$tmp"); then
+  printf '%s\\n' "$diff_output" | sed \
+    -e '1s|^--- .*|--- a/default.json|' \
+    -e '2s|^+++ .*|+++ b/default.json|'
+  exit 1
+fi
+"""
+description = "Print a patch when default.json is not up to date."
+
 ["test"]
 depends = ["build"]
 run = "bun test"
