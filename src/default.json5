@@ -33,7 +33,7 @@
 			// Renovate throws "Missing datasource!" warnings but still works
 			datasourceTemplate: "undefined",
 			matchStrings: [
-				'$each($.tools, function($v, $k) { $contains($k, ":") ? undefined : { "depName": $k, "currentValue": $type($v) = "string" ? $v : $v.version } })',
+				'$exists($.tools) ? $each($.tools, function($v, $k) { $contains($k, ":") ? undefined : { "depName": $k, "currentValue": $type($v) = "string" ? $v : $v.version } }) : []',
 			],
 		},
 		{
