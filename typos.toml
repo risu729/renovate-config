@@ -1,7 +1,0 @@
-# ref: https://github.com/crate-ci/typos/blob/master/docs/reference.md
-
-[files]
-ignore-hidden = false
-extend-exclude = [".git", "test/fixtures", "test/__snapshots__"]
-
-[default.extend-words]

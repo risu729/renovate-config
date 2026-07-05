@@ -13,6 +13,9 @@ local picked = helpers.pick(new Listing {
 })
 
 hooks = helpers.standardHooks((picked) {
+  ["typos"] = (picked["typos"]) {
+    exclude = List("test/fixtures/**", "test/__snapshots__/**")
+  }
   ["build"] = new Step {
     glob = List("src/default.json5", "default.json")
     check_diff = "mise run build:diff"
