@@ -10,7 +10,6 @@
 		":prConcurrentLimitNone",
 		"customManagers:biomeVersions",
 	],
-	gitIgnoredAuthors: ["/^autofix-ci\\[bot\\]/"],
 	ignorePresets: [":ignoreModulesAndTests"],
 	labels: [
 		"dependencies",
