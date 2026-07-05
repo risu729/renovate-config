@@ -90,7 +90,7 @@
 			"depNameTemplate": "mise",
 			"packageNameTemplate": "jdx/mise",
 			"matchStrings": [
-				"$.jobs.*.steps[$substringBefore(uses, \"@\") = \"jdx/mise-action\"].with.version.{ \"currentValue\": $ }"
+				"($append($.jobs.*.steps, $.runs.steps))[$substringBefore(uses, \"@\") = \"jdx/mise-action\"].with.version.{ \"currentValue\": $ }"
 			]
 		},
 		{
