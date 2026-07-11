@@ -1,43 +1,46 @@
 amends "https://raw.githubusercontent.com/risu729/hk-config/v1.0.0/presets.pkl"
+
 import "https://raw.githubusercontent.com/risu729/hk-config/v1.0.0/helpers.pkl"
 
-local picked = helpers.pick(new Listing {
-  "oxlint"
-  "oxfmt"
-  "tsc"
-  "github-actions"
-  "tombi"
-  "yaml"
-  "typos"
-  "hygiene"
-})
+local picked =
+  helpers.pick(new Listing {
+    "oxlint"
+    "oxfmt"
+    "tsc"
+    "github-actions"
+    "tombi"
+    "yaml"
+    "typos"
+    "hygiene"
+  })
 
-hooks = helpers.standardHooks((picked) {
-  ["typos"] = (picked["typos"]) {
-    exclude = List("test/fixtures/**", "test/__snapshots__/**")
-  }
-  ["build"] = new Step {
-    glob = List("src/default.json5", "default.json")
-    check_diff = "mise run build:diff"
-    fix = "mise run build"
-    exclusive = true // keep generated output stable before other steps inspect it
-  }
-  ["renovate-config-validator"] = new Group {
-    steps {
-      ["renovate-config-validator:repo"] = new Step {
-        glob = List(".github/renovate.json5")
-        check = "renovate-config-validator --strict"
-      }
-      ["renovate-config-validator:src"] = new Step {
-        glob = List("src/default.json5")
-        depends = List("build")
-        check = "renovate-config-validator --strict src/default.json5"
-      }
-      ["renovate-config-validator:default"] = new Step {
-        glob = List("default.json")
-        depends = List("build")
-        check = "renovate-config-validator --strict default.json"
+hooks =
+  helpers.standardHooks((picked) {
+    ["typos"] = (picked["typos"]) {
+      exclude = List("test/fixtures/**", "test/__snapshots__/**")
+    }
+    ["build"] = new Step {
+      glob = List("src/default.json5", "default.json")
+      check_diff = "mise run build:diff"
+      fix = "mise run build"
+      exclusive = true // keep generated output stable before other steps inspect it
+    }
+    ["renovate-config-validator"] = new Group {
+      steps {
+        ["renovate-config-validator:repo"] = new Step {
+          glob = List(".github/renovate.json5")
+          check = "renovate-config-validator --strict"
+        }
+        ["renovate-config-validator:src"] = new Step {
+          glob = List("src/default.json5")
+          depends = List("build")
+          check = "renovate-config-validator --strict src/default.json5"
+        }
+        ["renovate-config-validator:default"] = new Step {
+          glob = List("default.json")
+          depends = List("build")
+          check = "renovate-config-validator --strict default.json"
+        }
       }
     }
-  }
-})
+  })
