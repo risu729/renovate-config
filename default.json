@@ -172,6 +172,13 @@
 				"hk-config"
 			],
 			"groupName": "hk-config"
+		},
+		{
+			"matchDepNames": [
+				"typescript",
+				"npm:typescript"
+			],
+			"groupName": "typescript"
 		}
 	]
 }
