@@ -18,19 +18,6 @@
 	],
 	"customManagers": [
 		{
-			"customType": "jsonata",
-			"description": "Updates mise tools (shorthands)",
-			"managerFilePatterns": [
-				"/(^|/)\\.?mise\\.toml$/",
-				"/(^|/)\\.?mise/config\\.toml$/"
-			],
-			"fileFormat": "toml",
-			"datasourceTemplate": "undefined",
-			"matchStrings": [
-				"$exists($.tools) ? $each($.tools, function($v, $k) { $contains($k, \":\") ? undefined : { \"depName\": $k, \"currentValue\": $type($v) = \"string\" ? $v : $v.version } }) : []"
-			]
-		},
-		{
 			"customType": "regex",
 			"description": "Updates hk Pkl package imports",
 			"managerFilePatterns": [
@@ -166,97 +153,6 @@
 			"addLabels": [
 				"mise"
 			]
-		},
-		{
-			"matchManagers": [
-				"custom.jsonata"
-			],
-			"matchDepNames": [
-				"cargo-binstall",
-				"cargo-dist",
-				"release-plz",
-				"pitchfork"
-			],
-			"overrideDatasource": "crate"
-		},
-		{
-			"matchManagers": [
-				"custom.jsonata"
-			],
-			"matchDepNames": [
-				"biome"
-			],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "biomejs/biome",
-			"extractVersion": "^@biomejs/biome@(?<version>.+)"
-		},
-		{
-			"matchManagers": [
-				"custom.jsonata"
-			],
-			"matchDepNames": [
-				"hk"
-			],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "jdx/hk",
-			"extractVersion": "^v(?<version>.+)"
-		},
-		{
-			"matchManagers": [
-				"custom.jsonata"
-			],
-			"matchDepNames": [
-				"ghalint"
-			],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "suzuki-shunsuke/ghalint",
-			"extractVersion": "^v(?<version>.+)"
-		},
-		{
-			"matchManagers": [
-				"custom.jsonata"
-			],
-			"matchDepNames": [
-				"pinact"
-			],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "suzuki-shunsuke/pinact",
-			"extractVersion": "^v(?<version>.+)"
-		},
-		{
-			"matchManagers": [
-				"custom.jsonata"
-			],
-			"matchDepNames": [
-				"jc"
-			],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "kellyjonbrazil/jc",
-			"extractVersion": "^v(?<version>.+)"
-		},
-		{
-			"matchManagers": [
-				"custom.jsonata"
-			],
-			"matchDepNames": [
-				"powershell"
-			],
-			"overrideDatasource": "github-releases",
-			"overridePackageName": "PowerShell/PowerShell",
-			"extractVersion": "^v(?<version>.+)"
-		},
-		{
-			"matchManagers": [
-				"custom.jsonata"
-			],
-			"matchDepNames": [
-				"cspell",
-				"json5",
-				"prettier",
-				"oxlint",
-				"oxfmt"
-			],
-			"overrideDatasource": "npm"
 		},
 		{
 			"matchDepNames": [
