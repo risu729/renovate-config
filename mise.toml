@@ -5,7 +5,7 @@
 hk = "1.48.0"
 bun = "1.3.14"
 node = "26.5.0"
-"npm:semantic-release" = "25.0.5"
+"npm:semantic-release" = "25.0.6"
 oxlint = "1.73.0"
 oxfmt = "0.58.0"
 actionlint = "1.7.12"
