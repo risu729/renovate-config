@@ -179,6 +179,13 @@
 				"npm:typescript"
 			],
 			"groupName": "typescript"
+		},
+		{
+			"matchDepNames": [
+				"usage",
+				"usage-lib"
+			],
+			"groupName": "usage"
 		}
 	]
 }
