@@ -21,7 +21,9 @@ test.each([
 ] as const)("cargo-dist config file matching: %s", (path, matches) => {
 	expect(manager).toBeDefined();
 	expect(
-		manager?.managerFilePatterns.some((pattern) => new RegExp(pattern.slice(1, -1), "u").test(path)),
+		manager?.managerFilePatterns.some((pattern) =>
+			new RegExp(pattern.slice(1, -1), "u").test(path),
+		),
 	).toBe(matches);
 });
 
@@ -30,9 +32,7 @@ test("cargo-dist config extracts the version used by the mise tool", async () =>
 	const dist = TOML.parse(
 		await file(`${import.meta.dir}/fixtures/cargo-dist/dist-workspace.toml`).text(),
 	);
-	const mise = TOML.parse(
-		await file(`${import.meta.dir}/fixtures/cargo-dist/mise.toml`).text(),
-	);
+	const mise = TOML.parse(await file(`${import.meta.dir}/fixtures/cargo-dist/mise.toml`).text());
 	const result = await jsonata(manager!.matchStrings[0]!).evaluate(dist);
 	expect(result).toEqual({ currentValue: "0.32.0" });
 	expect(mise).toEqual({ tools: { "cargo-dist": "0.32.0" } });
