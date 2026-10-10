@@ -112,8 +112,10 @@
 				"/(^|/)dist(?:-workspace)?\\.toml$/"
 			],
 			"fileFormat": "toml",
-			"datasourceTemplate": "crate",
+			"datasourceTemplate": "github-releases",
 			"depNameTemplate": "cargo-dist",
+			"packageNameTemplate": "axodotdev/cargo-dist",
+			"extractVersionTemplate": "^v(?<version>.+)$",
 			"matchStrings": [
 				"{ \"currentValue\": $.dist.\"cargo-dist-version\" }"
 			]
@@ -160,6 +162,14 @@
 				"@biomejs/biome"
 			],
 			"groupName": "biome"
+		},
+		{
+			"matchDepNames": [
+				"cargo-dist",
+				"aqua:axodotdev/cargo-dist",
+				"github:axodotdev/cargo-dist"
+			],
+			"groupName": "cargo-dist"
 		},
 		{
 			"matchDepNames": [
