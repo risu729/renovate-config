@@ -50,7 +50,7 @@ jobs:
     name: Generate Actions Timeline
     needs:
       - ci-check
-    if: always() && !cancelled()
+    if: ${{ always() && !cancelled() }}
     runs-on: ubuntu-26.04
     timeout-minutes: 5
     permissions:
