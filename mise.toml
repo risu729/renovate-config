@@ -5,7 +5,7 @@ min_version = "2026.10.7"
 
 [tools]
 hk = "2.5.0"
-bun = "1.4.2"
+bun = "1.4.3"
 node = "26.11.1"
 "npm:semantic-release" = "25.0.9"
 oxlint = "1.73.0"
