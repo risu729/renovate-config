@@ -195,5 +195,11 @@
 			matchDepNames: ["usage", "usage-lib"],
 			groupName: "usage",
 		},
+		{
+			// mise.lock owns these generated graphs and their digests. Update them
+			// through mise, not as independent package-manager projects.
+			matchFileNames: ["**/.mise/locks/**", "**/.config/mise/locks/**"],
+			enabled: false,
+		},
 	],
 }

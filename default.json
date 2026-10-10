@@ -186,6 +186,13 @@
 				"usage-lib"
 			],
 			"groupName": "usage"
+		},
+		{
+			"matchFileNames": [
+				"**/.mise/locks/**",
+				"**/.config/mise/locks/**"
+			],
+			"enabled": false
 		}
 	]
 }
