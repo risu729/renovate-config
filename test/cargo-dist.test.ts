@@ -21,17 +21,17 @@ test.each([
 ] as const)("cargo-dist config file matching: %s", (path, matches) => {
 	expect(manager).toBeDefined();
 	expect(
-		manager?.managerFilePatterns.some((pattern) => new RegExp(pattern.slice(1, -1)).test(path)),
+		manager?.managerFilePatterns.some((pattern) => new RegExp(pattern.slice(1, -1), "u").test(path)),
 	).toBe(matches);
 });
 
 test("cargo-dist config extracts the version used by the mise tool", async () => {
 	expect(manager).toBeDefined();
 	const dist = TOML.parse(
-		await file(new URL("fixtures/cargo-dist/dist-workspace.toml", import.meta.url)).text(),
+		await file(`${import.meta.dir}/fixtures/cargo-dist/dist-workspace.toml`).text(),
 	);
 	const mise = TOML.parse(
-		await file(new URL("fixtures/cargo-dist/mise.toml", import.meta.url)).text(),
+		await file(`${import.meta.dir}/fixtures/cargo-dist/mise.toml`).text(),
 	);
 	const result = await jsonata(manager!.matchStrings[0]!).evaluate(dist);
 	expect(result).toEqual({ currentValue: "0.32.0" });
@@ -45,8 +45,8 @@ test("cargo-dist config follows GitHub releases without writing the tag prefix",
 		packageNameTemplate: "axodotdev/cargo-dist",
 	});
 	expect(manager?.extractVersionTemplate).toBeDefined();
-	const release = new RegExp(manager!.extractVersionTemplate!).exec("v0.33.0");
-	expect(release?.groups?.version).toBe("0.33.0");
+	const release = new RegExp(manager!.extractVersionTemplate!, "u").exec("v0.33.0");
+	expect(release?.groups?.["version"]).toBe("0.33.0");
 });
 
 test.each(["cargo-dist", "aqua:axodotdev/cargo-dist", "github:axodotdev/cargo-dist"])(
