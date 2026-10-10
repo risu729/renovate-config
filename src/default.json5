@@ -98,8 +98,11 @@
 			description: "Updates dist version in dist.toml",
 			managerFilePatterns: ["/(^|/)dist(?:-workspace)?\\.toml$/"],
 			fileFormat: "toml",
-			datasourceTemplate: "crate",
+			// Follow the binary releases used by mise; crates.io can lag behind.
+			datasourceTemplate: "github-releases",
 			depNameTemplate: "cargo-dist",
+			packageNameTemplate: "axodotdev/cargo-dist",
+			extractVersionTemplate: "^v(?<version>.+)$",
 			matchStrings: ['{ "currentValue": $.dist."cargo-dist-version" }'],
 		},
 	],
@@ -178,6 +181,10 @@
 		{
 			matchDepNames: ["biome", "@biomejs/biome"],
 			groupName: "biome",
+		},
+		{
+			matchDepNames: ["cargo-dist", "aqua:axodotdev/cargo-dist", "github:axodotdev/cargo-dist"],
+			groupName: "cargo-dist",
 		},
 		{
 			matchDepNames: ["hk"],
