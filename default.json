@@ -137,6 +137,16 @@
 			"ignoreUnstable": false
 		},
 		{
+			"matchManagers": [
+				"mise"
+			],
+			"matchDepNames": [
+				"python"
+			],
+			"versioning": "python",
+			"separateMultipleMinor": true
+		},
+		{
 			"matchDepNames": [
 				"mise"
 			],
