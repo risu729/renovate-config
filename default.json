@@ -137,11 +137,11 @@
 			"ignoreUnstable": false
 		},
 		{
-			"matchManagers": [
-				"mise"
+			"matchDatasources": [
+				"github-tags"
 			],
-			"matchDepNames": [
-				"python"
+			"matchPackageNames": [
+				"python/cpython"
 			],
 			"versioning": "python",
 			"separateMultipleMinor": true

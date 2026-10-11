@@ -161,14 +161,15 @@
 			matchDepNames: ["node"],
 			ignoreUnstable: false,
 		},
-		// treat Python minor releases like majors
+		// mark Python minor releases as breaking
 		{
 			// Python makes breaking changes in minor releases; python versioning marks them as isBreaking
 			// ref: https://docs.renovatebot.com/modules/versioning/#breaking-changes
-			// the mise manager does not set it for python, unlike the devbox manager
+			// the mise and asdf managers do not set it for python/cpython, unlike the devbox manager
 			// ref: https://github.com/renovatebot/renovate/blob/main/lib/modules/manager/devbox/tool-versioning.ts
-			matchManagers: ["mise"],
-			matchDepNames: ["python"],
+			// match the CPython tags rather than the depName, which Docker images, pyenv and requires-python also use
+			matchDatasources: ["github-tags"],
+			matchPackageNames: ["python/cpython"],
 			versioning: "python",
 			// give each minor its own PR so patches of the current minor still arrive while a new minor is blocked
 			separateMultipleMinor: true,
