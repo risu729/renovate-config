@@ -137,6 +137,16 @@
 			"ignoreUnstable": false
 		},
 		{
+			"matchDatasources": [
+				"github-tags"
+			],
+			"matchPackageNames": [
+				"python/cpython"
+			],
+			"versioning": "python",
+			"separateMultipleMinor": true
+		},
+		{
 			"matchDepNames": [
 				"mise"
 			],
