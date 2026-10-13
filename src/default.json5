@@ -45,20 +45,6 @@
 		},
 		{
 			customType: "jsonata",
-			description: "Updates min_version in mise config",
-			managerFilePatterns: [
-				// ref: https://docs.renovatebot.com/modules/manager/mise/#file-matching
-				"/(^|/)\\.?mise\\.toml$/",
-				"/(^|/)\\.?mise/config\\.toml$/",
-			],
-			fileFormat: "toml",
-			datasourceTemplate: "github-releases",
-			depNameTemplate: "mise",
-			packageNameTemplate: "jdx/mise",
-			matchStrings: ['{ "currentValue": $.min_version }'],
-		},
-		{
-			customType: "jsonata",
 			description: "Updates mise versions in GitHub Actions",
 			managerFilePatterns: [
 				// ref: https://docs.renovatebot.com/modules/manager/github-actions/#file-matching
