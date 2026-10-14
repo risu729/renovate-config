@@ -203,7 +203,8 @@
 		{
 			"matchDepNames": [
 				"usage",
-				"usage-lib"
+				"usage-lib",
+				"usage_rs"
 			],
 			"groupName": "usage"
 		},

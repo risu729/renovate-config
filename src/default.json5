@@ -215,7 +215,7 @@
 			groupName: "typescript",
 		},
 		{
-			matchDepNames: ["usage", "usage-lib"],
+			matchDepNames: ["usage", "usage-lib", "usage_rs"],
 			groupName: "usage",
 		},
 		{
