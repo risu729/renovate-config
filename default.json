@@ -91,6 +91,21 @@
 			]
 		},
 		{
+			"customType": "regex",
+			"description": "Updates compatibilityDate in cloudflare.config.ts",
+			"managerFilePatterns": [
+				"/(^|/)cloudflare\\.config\\.ts$/"
+			],
+			"datasourceTemplate": "custom.wrangler-compatibility-date",
+			"depNameTemplate": "compatibility_date",
+			"versioningTemplate": "regex:^(?<minor>[0-9]{4})-(?<patch>[0-9]{2})-(?<build>[0-9]{2})$",
+			"matchStrings": [
+				"//[^\\r\\n]*|/\\*[\\s\\S]*?\\*/|(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|\"compatibilityDate\"|'compatibilityDate')\\s*:\\s*\"(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})\"|\"(?:\\\\[\\s\\S]|[^\"\\\\])*\"|'(?:\\\\[\\s\\S]|[^'\\\\])*'|`(?:\\\\[\\s\\S]|[^`\\\\])*`",
+				"//[^\\r\\n]*|/\\*[\\s\\S]*?\\*/|(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|\"compatibilityDate\"|'compatibilityDate')\\s*:\\s*'(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})'|\"(?:\\\\[\\s\\S]|[^\"\\\\])*\"|'(?:\\\\[\\s\\S]|[^'\\\\])*'|`(?:\\\\[\\s\\S]|[^`\\\\])*`",
+				"//[^\\r\\n]*|/\\*[\\s\\S]*?\\*/|(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|\"compatibilityDate\"|'compatibilityDate')\\s*:\\s*`(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})`|\"(?:\\\\[\\s\\S]|[^\"\\\\])*\"|'(?:\\\\[\\s\\S]|[^'\\\\])*'|`(?:\\\\[\\s\\S]|[^`\\\\])*`"
+			]
+		},
+		{
 			"customType": "jsonata",
 			"description": "Updates dist version in dist.toml",
 			"managerFilePatterns": [
