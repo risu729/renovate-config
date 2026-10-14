@@ -88,10 +88,12 @@
 			datasourceTemplate: "custom.wrangler-compatibility-date",
 			depNameTemplate: "compatibility_date",
 			versioningTemplate: "regex:^(?<minor>[0-9]{4})-(?<patch>[0-9]{2})-(?<build>[0-9]{2})$",
+			// Consume comments and unrelated string literals without currentValue.
+			// Renovate skips those matches instead of updating examples inside them.
 			matchStrings: [
-				'(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|"compatibilityDate"|\'compatibilityDate\')\\s*:\\s*"(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})"',
-				"(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|\"compatibilityDate\"|'compatibilityDate')\\s*:\\s*'(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})'",
-				"(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|\"compatibilityDate\"|'compatibilityDate')\\s*:\\s*`(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})`",
+				'//[^\\r\\n]*|/\\*[\\s\\S]*?\\*/|(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|"compatibilityDate"|\'compatibilityDate\')\\s*:\\s*"(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})"|"(?:\\\\[\\s\\S]|[^"\\\\])*"|\'(?:\\\\[\\s\\S]|[^\'\\\\])*\'|`(?:\\\\[\\s\\S]|[^`\\\\])*`',
+				"//[^\\r\\n]*|/\\*[\\s\\S]*?\\*/|(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|\"compatibilityDate\"|'compatibilityDate')\\s*:\\s*'(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})'|\"(?:\\\\[\\s\\S]|[^\"\\\\])*\"|'(?:\\\\[\\s\\S]|[^'\\\\])*'|`(?:\\\\[\\s\\S]|[^`\\\\])*`",
+				"//[^\\r\\n]*|/\\*[\\s\\S]*?\\*/|(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|\"compatibilityDate\"|'compatibilityDate')\\s*:\\s*`(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})`|\"(?:\\\\[\\s\\S]|[^\"\\\\])*\"|'(?:\\\\[\\s\\S]|[^'\\\\])*'|`(?:\\\\[\\s\\S]|[^`\\\\])*`",
 			],
 		},
 		{

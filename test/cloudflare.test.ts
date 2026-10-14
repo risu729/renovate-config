@@ -14,7 +14,7 @@ const extract = (content: string) => {
 		Array.from(
 			content.matchAll(new RegExp(pattern, "gu")),
 			(match) => match.groups?.["currentValue"],
-		),
+		).filter((value) => typeof value === "string"),
 	);
 };
 
@@ -91,4 +91,43 @@ test("Cloudflare and Wrangler config use the same compatibility date datasource"
 		depNameTemplate: wrangler!.depNameTemplate,
 		versioningTemplate: wrangler!.versioningTemplate,
 	});
+});
+
+test.each([
+	'// worker: { compatibilityDate: "2026-09-27" },',
+	'/*\n compatibilityDate: "2026-09-27",\n*/',
+	'/* worker: { compatibilityDate: "2026-09-27" } */',
+	`const example = 'worker: { compatibilityDate: "2026-09-27" }';`,
+	'const example = `worker: { compatibilityDate: "2026-09-27" }`;',
+])("Cloudflare config skips commented or quoted examples: %s", (example) => {
+	expect(extract(example)).toEqual([]);
+	expect(
+		extract(`${example}\nexport default { worker: { compatibilityDate: "2026-09-28" } };`),
+	).toEqual(["2026-09-28"]);
+});
+
+test("Cloudflare config keeps dates after strings containing comment markers", () => {
+	expect(
+		extract(`export default defineConfig({ worker: {
+	name: "https://example.com/*path*/",
+	"compatibilityDate": "2026-09-27",
+} });`),
+	).toEqual(["2026-09-27"]);
+});
+
+test("Cloudflare date matches preserve comments and formatting when replaced", () => {
+	const content = `// worker: { compatibilityDate: "2026-09-27" }
+/*\n compatibilityDate: "2026-09-27",\n*/
+export default { worker: { "compatibilityDate":\n\t"2026-09-27" } };`;
+	const replacements = manager!.matchStrings.flatMap((pattern) =>
+		Array.from(content.matchAll(new RegExp(pattern, "gu"))).filter(
+			(match) => typeof match.groups?.["currentValue"] === "string",
+		),
+	);
+	expect(replacements).toHaveLength(1);
+	const match = replacements[0]!;
+	const updated = content.replace(match[0], match[0].replace("2026-09-27", "2026-09-28"));
+	expect(updated).toBe(`// worker: { compatibilityDate: "2026-09-27" }
+/*\n compatibilityDate: "2026-09-27",\n*/
+export default { worker: { "compatibilityDate":\n\t"2026-09-28" } };`);
 });
