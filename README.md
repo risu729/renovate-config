@@ -10,6 +10,7 @@ Features:
 - Enables automerge for minor, patch, digest, and pin updates.
 - Removes hourly and concurrent PR limits.
 - Adds custom managers for Biome versions, mise tools, hk Pkl imports, hk-config raw URL imports, GitHub Actions workflow pins, and other tool-specific files used in my repositories.
+- Updates Cloudflare compatibility dates in `wrangler.json`, `wrangler.jsonc`, `wrangler.toml`, and `cloudflare.config.ts`, using Miniflare releases. The TypeScript manager handles literal `compatibilityDate` properties; computed dates and imports need manual updates.
 - Normalizes dependency labels while keeping custom-manager-only labels quiet.
 
 Add the following to your `renovate.json` file:

@@ -80,6 +80,21 @@
 			matchStrings: ['{ "currentValue": compatibility_date }'],
 		},
 		{
+			customType: "regex",
+			description: "Updates compatibilityDate in cloudflare.config.ts",
+			// cf automatically discovers this filename only.
+			// ref: https://github.com/cloudflare/cf/blob/main/packages/cli/src/lib/project-settings.ts
+			managerFilePatterns: ["/(^|/)cloudflare\\.config\\.ts$/"],
+			datasourceTemplate: "custom.wrangler-compatibility-date",
+			depNameTemplate: "compatibility_date",
+			versioningTemplate: "regex:^(?<minor>[0-9]{4})-(?<patch>[0-9]{2})-(?<build>[0-9]{2})$",
+			matchStrings: [
+				'(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|"compatibilityDate"|\'compatibilityDate\')\\s*:\\s*"(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})"',
+				"(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|\"compatibilityDate\"|'compatibilityDate')\\s*:\\s*'(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})'",
+				"(?:^|[,{\\r\\n])[ \\t]*(?:compatibilityDate|\"compatibilityDate\"|'compatibilityDate')\\s*:\\s*`(?<currentValue>[0-9]{4}-[0-9]{2}-[0-9]{2})`",
+			],
+		},
+		{
 			customType: "jsonata",
 			description: "Updates dist version in dist.toml",
 			managerFilePatterns: ["/(^|/)dist(?:-workspace)?\\.toml$/"],
