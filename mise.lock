@@ -93,9 +93,9 @@ checksum = "sha256:d916511b55965e91be7a88e17f88d895b6793ceaba3e6c9b194aefe51c2c6
 url = "https://nodejs.org/dist/v26.11.1/node-v26.11.1-darwin-arm64.tar.gz"
 
 [[tools."npm:renovate"]]
-version = "44.149.3"
+version = "44.150.0"
 backend = "npm:renovate"
-specifiers = ["44.149.3"]
+specifiers = ["44.150.0"]
 
 [[tools."npm:semantic-release"]]
 version = "25.0.9"
