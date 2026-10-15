@@ -33,6 +33,9 @@ lockfile_platforms = ["linux-x64", "macos-arm64"]
 experimental = true
 auto_install_disable_tools = ["npm:renovate"]
 
+[settings.task]
+source_freshness_hash_contents = true
+
 [settings.npm]
 package_manager = "bun"
 

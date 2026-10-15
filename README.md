@@ -29,6 +29,12 @@ or to use a specific version:
 }
 ```
 
+## Development
+
+Run `mise run build` to build `default.json` from `src/default.json5`. The task reuses
+unchanged inputs and restores missing or modified output from its local cache.
+Use `mise run --force build` to regenerate the file explicitly.
+
 ## License
 
 [MIT](LICENSE)
