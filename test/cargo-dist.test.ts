@@ -38,6 +38,19 @@ test("cargo-dist config extracts the version used by the mise tool", async () =>
 	expect(mise).toEqual({ tools: { "cargo-dist": "0.32.0" } });
 });
 
+test.each([
+	[{ dist: { "cargo-dist-version": "0.32.0" }, version: "9.9.9" }, { currentValue: "0.32.0" }],
+	[{ dist: { "cargo-dist-version": "0.33.0" }, version: "9.9.9" }, { currentValue: "0.33.0" }],
+	[
+		{ dist: { "cargo-dist-version": "1.0.0-rc.1+build.2" }, version: "9.9.9" },
+		{ currentValue: "1.0.0-rc.1+build.2" },
+	],
+] as const)("cargo-dist config extracts the exact version from %j", async (dist, expected) => {
+	expect(manager).toBeDefined();
+	const result = await jsonata(manager!.matchStrings[0]!).evaluate(dist);
+	expect(result).toEqual(expected);
+});
+
 test("cargo-dist config follows GitHub releases without writing the tag prefix", () => {
 	expect(manager).toMatchObject({
 		datasourceTemplate: "github-releases",
