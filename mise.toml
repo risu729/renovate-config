@@ -19,7 +19,7 @@ zizmor = "1.31.1"
 tombi = "1.8.9"
 yamlfmt = "0.21.0"
 # required for pipx backend
-uv = "0.13.3"
+uv = "0.13.4"
 yamllint = "1.38.0"
 "npm:renovate" = "44.165.3"
 typos = "1.51.1"
