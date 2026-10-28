@@ -10,7 +10,20 @@
 		":prConcurrentLimitNone",
 		"customManagers:biomeVersions",
 	],
-	ignorePresets: [":ignoreModulesAndTests"],
+	ignorePresets: [
+		":ignoreModulesAndTests",
+		// replaced by the minimumReleaseAge below, which covers every datasource
+		"security:minimumReleaseAgeNpm",
+	],
+	// wait one day after a release before updating, for every datasource
+	// mise refuses tool versions younger than its minimum_release_age (24h by default),
+	// so updates raised earlier fail to update mise.lock
+	// ref: https://mise.jdx.dev/configuration/settings.html#minimum_release_age
+	minimumReleaseAge: "1 day",
+	// raise releases without a releaseTimestamp instead of holding them forever
+	// some datasources and update types (e.g. lockFileMaintenance) have none
+	// ref: https://docs.renovatebot.com/configuration-options/#minimumreleaseagebehaviour
+	minimumReleaseAgeBehaviour: "timestamp-optional",
 	labels: [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}",

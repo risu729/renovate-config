@@ -10,8 +10,11 @@
 		"customManagers:biomeVersions"
 	],
 	"ignorePresets": [
-		":ignoreModulesAndTests"
+		":ignoreModulesAndTests",
+		"security:minimumReleaseAgeNpm"
 	],
+	"minimumReleaseAge": "1 day",
+	"minimumReleaseAgeBehaviour": "timestamp-optional",
 	"labels": [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}"
