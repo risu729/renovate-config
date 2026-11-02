@@ -137,7 +137,8 @@
 			"matchDepNames": [
 				"node"
 			],
-			"ignoreUnstable": false
+			"ignoreUnstable": false,
+			"allowedVersions": "!/-/"
 		},
 		{
 			"matchDatasources": [
