@@ -140,6 +140,15 @@
 			"ignoreUnstable": false
 		},
 		{
+			"matchDepNames": [
+				"node"
+			],
+			"matchDatasources": [
+				"node-version"
+			],
+			"allowedVersions": "!/-/"
+		},
+		{
 			"matchDatasources": [
 				"github-tags"
 			],

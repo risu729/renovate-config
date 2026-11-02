@@ -177,6 +177,13 @@
 			matchDepNames: ["node"],
 			ignoreUnstable: false,
 		},
+		{
+			// ignoreUnstable: false also lets prereleases such as v27.0.0-alpha.0.0.0 through
+			// limited to node-version so docker tags such as 26-alpine are never matched
+			matchDepNames: ["node"],
+			matchDatasources: ["node-version"],
+			allowedVersions: "!/-/",
+		},
 		// mark Python minor releases as breaking
 		{
 			// Python makes breaking changes in minor releases; python versioning marks them as isBreaking
