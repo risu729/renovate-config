@@ -206,6 +206,24 @@
 			"groupName": "hk-config"
 		},
 		{
+			"matchDatasources": [
+				"github-releases",
+				"github-tags",
+				"docker"
+			],
+			"matchPackageNames": [
+				"jdx/mise",
+				"ghcr.io/jdx/mise"
+			],
+			"groupName": "mise",
+			"groupSlug": "mise",
+			"groupSingleUpdates": true,
+			"separateMajorMinor": false,
+			"separateMinorPatch": false,
+			"internalChecksFilter": "none",
+			"platformAutomerge": false
+		},
+		{
 			"matchDepNames": [
 				"typescript",
 				"npm:typescript"

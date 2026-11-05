@@ -231,6 +231,24 @@
 			groupName: "hk-config",
 		},
 		{
+			// Group mise itself across version pins and its official container, not mise-action.
+			matchDatasources: ["github-releases", "github-tags", "docker"],
+			matchPackageNames: ["jdx/mise", "ghcr.io/jdx/mise"],
+			groupName: "mise",
+			groupSlug: "mise",
+			groupSingleUpdates: true,
+			separateMajorMinor: false,
+			separateMinorPatch: false,
+			// GHCR has no release timestamp. Keep young GitHub releases in the group
+			// instead of filtering them out while the container advances on its own.
+			// Automerge still waits for every available release's minimumReleaseAge.
+			// ref: https://docs.renovatebot.com/configuration-options/#internalchecksfilter
+			internalChecksFilter: "none",
+			// Renovate must enforce its age check even when it is not a required check
+			// in the hosting platform's branch protection rules.
+			platformAutomerge: false,
+		},
+		{
 			matchDepNames: ["typescript", "npm:typescript"],
 			groupName: "typescript",
 		},
