@@ -38,14 +38,15 @@ test("mise grouping retains the release cooldown without dropping young version 
 	expect(config.minimumReleaseAge).toBe("1 day");
 	expect(config.minimumReleaseAgeBehaviour).toBe("timestamp-optional");
 	expect(group).not.toHaveProperty("minimumReleaseAge");
-	expect(group).toMatchObject({
+	// All dependencies now inherit the same early-PR policy.
+	expect(group).not.toHaveProperty("internalChecksFilter");
+	expect(group).not.toHaveProperty("platformAutomerge");
+	expect(group).not.toHaveProperty("prCreation");
+	expect(config).toMatchObject({
 		internalChecksFilter: "none",
 		platformAutomerge: false,
+		prCreation: "immediate",
 	});
-	// PR-only CI needs a PR before checks can run.
-	expect(group).not.toHaveProperty("prCreation");
-	// Keep the exception local; other dependencies retain strict filtering.
-	expect(config).not.toHaveProperty("internalChecksFilter");
 });
 
 test("mise grouping preserves datasource lookup and Docker digest pinning", () => {
