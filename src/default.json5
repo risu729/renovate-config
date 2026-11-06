@@ -170,6 +170,18 @@
 		},
 	},
 	packageRules: [
+		{
+			description: "Allow immediate updates for my GitHub releases and tags",
+			matchDatasources: ["github-releases", "github-tags"],
+			matchPackageNames: ["risu729/**"],
+			minimumReleaseAge: "0 days",
+		},
+		{
+			description: "Allow immediate updates for my npm packages",
+			matchDatasources: ["npm"],
+			matchPackageNames: ["@risu729/**"],
+			minimumReleaseAge: "0 days",
+		},
 		// use unstable versions
 		{
 			// odd major versions are unstable but use the latest
