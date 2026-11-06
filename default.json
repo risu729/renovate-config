@@ -15,6 +15,9 @@
 	],
 	"minimumReleaseAge": "1 day",
 	"minimumReleaseAgeBehaviour": "timestamp-optional",
+	"internalChecksFilter": "none",
+	"prCreation": "immediate",
+	"platformAutomerge": false,
 	"labels": [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}"
@@ -240,9 +243,7 @@
 			"groupSlug": "mise",
 			"groupSingleUpdates": true,
 			"separateMajorMinor": false,
-			"separateMinorPatch": false,
-			"internalChecksFilter": "none",
-			"platformAutomerge": false
+			"separateMinorPatch": false
 		},
 		{
 			"matchDepNames": [
