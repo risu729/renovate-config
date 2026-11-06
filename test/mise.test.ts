@@ -16,7 +16,7 @@ test("mise version pins and the official container share one stable group", () =
 		groupName: "mise",
 		groupSingleUpdates: true,
 		groupSlug: "mise",
-		matchDatasources: ["github-releases", "github-tags", "docker"],
+		matchDatasources: ["github-releases", "github-release-attachments", "github-tags", "docker"],
 		matchPackageNames: ["jdx/mise", "ghcr.io/jdx/mise"],
 		separateMajorMinor: false,
 		separateMinorPatch: false,
