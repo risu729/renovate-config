@@ -22,5 +22,5 @@ description = "Print a patch when default.json is not up to date."
 
 ["test"]
 depends = ["build"]
-run = "bun test"
+run = ["bun test", "node --test test/mise.integration.mts"]
 description = "Run tests."

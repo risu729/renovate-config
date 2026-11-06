@@ -229,6 +229,7 @@
 		{
 			"matchDatasources": [
 				"github-releases",
+				"github-release-attachments",
 				"github-tags",
 				"docker"
 			],

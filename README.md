@@ -30,6 +30,14 @@ or to use a specific version:
 }
 ```
 
+## Development
+
+Run `mise run test` for the Bun unit tests and the Node integration tests. The
+integration tests use the mise-pinned Renovate installation to extract fixtures,
+apply the preset, and verify grouping and release-age checks without remote lookups.
+They intentionally exercise Renovate internals so changes are caught when its pin updates.
+To check another installation, set `RENOVATE_EXECUTABLE` to its `renovate` executable.
+
 ## License
 
 [MIT](LICENSE)

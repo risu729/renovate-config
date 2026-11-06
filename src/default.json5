@@ -244,7 +244,8 @@
 		},
 		{
 			// Group mise itself across version pins and its official container, not mise-action.
-			matchDatasources: ["github-releases", "github-tags", "docker"],
+			// The native GitHub Actions manager uses release attachments for with.version/sha256.
+			matchDatasources: ["github-releases", "github-release-attachments", "github-tags", "docker"],
 			matchPackageNames: ["jdx/mise", "ghcr.io/jdx/mise"],
 			groupName: "mise",
 			groupSlug: "mise",
