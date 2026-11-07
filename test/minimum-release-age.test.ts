@@ -55,9 +55,9 @@ test.each([
 	expect(matches).toBe(exempt);
 });
 
-test("dependencies use flexible filtering without delegating automerge", () => {
+test("dependencies use strict filtering without delegating automerge", () => {
 	expect(config).toMatchObject({
-		internalChecksFilter: "flexible",
+		internalChecksFilter: "strict",
 		platformAutomerge: false,
 		prCreation: "immediate",
 	});
