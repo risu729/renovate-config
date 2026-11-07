@@ -10,7 +10,27 @@
 		":prConcurrentLimitNone",
 		"customManagers:biomeVersions",
 	],
-	ignorePresets: [":ignoreModulesAndTests"],
+	ignorePresets: [
+		":ignoreModulesAndTests",
+		// replaced by the minimumReleaseAge below, which covers every datasource
+		"security:minimumReleaseAgeNpm",
+	],
+	// wait one day after a release before automerging, for every datasource
+	// mise also refuses young tool versions when generating mise.lock (24h by default)
+	// ref: https://mise.jdx.dev/configuration/settings.html#minimum_release_age
+	minimumReleaseAge: "1 day",
+	// raise releases without a releaseTimestamp instead of holding them forever
+	// some datasources and update types (e.g. lockFileMaintenance) have none
+	// ref: https://docs.renovatebot.com/configuration-options/#minimumreleaseagebehaviour
+	minimumReleaseAgeBehaviour: "timestamp-optional",
+	// Prefer a mature release over newer pending versions. If every candidate is
+	// pending, still create an early PR and wait for its checks before automerging.
+	// ref: https://docs.renovatebot.com/configuration-options/#internalchecksfilter
+	internalChecksFilter: "flexible",
+	prCreation: "immediate",
+	// Renovate must enforce its age check even when it is not a required check
+	// in the hosting platform's branch protection rules.
+	platformAutomerge: false,
 	labels: [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}",
@@ -157,12 +177,31 @@
 		},
 	},
 	packageRules: [
+		{
+			description: "Allow immediate updates for my GitHub releases and tags",
+			matchDatasources: ["github-releases", "github-tags"],
+			matchPackageNames: ["risu729/**"],
+			minimumReleaseAge: "0 days",
+		},
+		{
+			description: "Allow immediate updates for my npm packages",
+			matchDatasources: ["npm"],
+			matchPackageNames: ["@risu729/**"],
+			minimumReleaseAge: "0 days",
+		},
 		// use unstable versions
 		{
 			// odd major versions are unstable but use the latest
 			// ref: https://docs.renovatebot.com/modules/versioning/node/
 			matchDepNames: ["node"],
 			ignoreUnstable: false,
+		},
+		{
+			// ignoreUnstable: false also lets prereleases such as v27.0.0-alpha.0.0.0 through
+			// limited to node-version so docker tags such as 26-alpine are never matched
+			matchDepNames: ["node"],
+			matchDatasources: ["node-version"],
+			allowedVersions: "!/-/",
 		},
 		// mark Python minor releases as breaking
 		{
@@ -209,6 +248,21 @@
 		{
 			matchDepNames: ["hk-config"],
 			groupName: "hk-config",
+		},
+		{
+			// Group mise itself across version pins and its official container, not mise-action.
+			// The native GitHub Actions manager uses release attachments for with.version/sha256.
+			matchDatasources: ["github-releases", "github-release-attachments", "github-tags", "docker"],
+			matchPackageNames: ["jdx/mise", "ghcr.io/jdx/mise"],
+			// Let Docker update first; timestamped runtime pins join after the cooldown.
+			// Keep the simpler selection behavior until container timestamps are available.
+			// ref: https://github.com/risu729/renovate-config/issues/2898
+			internalChecksFilter: "strict",
+			groupName: "mise",
+			groupSlug: "mise",
+			groupSingleUpdates: true,
+			separateMajorMinor: false,
+			separateMinorPatch: false,
 		},
 		{
 			matchDepNames: ["typescript", "npm:typescript"],

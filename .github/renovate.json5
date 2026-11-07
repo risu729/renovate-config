@@ -15,7 +15,7 @@
 	packageRules: [
 		{
 			// Fixed parser inputs, not installed tools; preserve their regression expectations.
-			matchFileNames: ["test/fixtures/cargo-dist/**"],
+			matchFileNames: ["test/fixtures/cargo-dist/**", "test/fixtures/mise/**"],
 			enabled: false,
 		},
 		{

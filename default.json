@@ -10,8 +10,14 @@
 		"customManagers:biomeVersions"
 	],
 	"ignorePresets": [
-		":ignoreModulesAndTests"
+		":ignoreModulesAndTests",
+		"security:minimumReleaseAgeNpm"
 	],
+	"minimumReleaseAge": "1 day",
+	"minimumReleaseAgeBehaviour": "timestamp-optional",
+	"internalChecksFilter": "flexible",
+	"prCreation": "immediate",
+	"platformAutomerge": false,
 	"labels": [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}"
@@ -131,10 +137,40 @@
 	},
 	"packageRules": [
 		{
+			"description": "Allow immediate updates for my GitHub releases and tags",
+			"matchDatasources": [
+				"github-releases",
+				"github-tags"
+			],
+			"matchPackageNames": [
+				"risu729/**"
+			],
+			"minimumReleaseAge": "0 days"
+		},
+		{
+			"description": "Allow immediate updates for my npm packages",
+			"matchDatasources": [
+				"npm"
+			],
+			"matchPackageNames": [
+				"@risu729/**"
+			],
+			"minimumReleaseAge": "0 days"
+		},
+		{
 			"matchDepNames": [
 				"node"
 			],
 			"ignoreUnstable": false
+		},
+		{
+			"matchDepNames": [
+				"node"
+			],
+			"matchDatasources": [
+				"node-version"
+			],
+			"allowedVersions": "!/-/"
 		},
 		{
 			"matchDatasources": [
@@ -192,6 +228,24 @@
 				"hk-config"
 			],
 			"groupName": "hk-config"
+		},
+		{
+			"matchDatasources": [
+				"github-releases",
+				"github-release-attachments",
+				"github-tags",
+				"docker"
+			],
+			"matchPackageNames": [
+				"jdx/mise",
+				"ghcr.io/jdx/mise"
+			],
+			"internalChecksFilter": "strict",
+			"groupName": "mise",
+			"groupSlug": "mise",
+			"groupSingleUpdates": true,
+			"separateMajorMinor": false,
+			"separateMinorPatch": false
 		},
 		{
 			"matchDepNames": [
