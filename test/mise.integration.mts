@@ -141,7 +141,7 @@ for (const packageFile of [".github/workflows/ci.yml", "action.yml"]) {
 			datasource: dependency.datasource,
 			groupName: "mise",
 			groupSlug: "mise",
-			internalChecksFilter: "none",
+			internalChecksFilter: "strict",
 			minimumReleaseAge: "1 day",
 			platformAutomerge: false,
 		});
@@ -158,27 +158,32 @@ test("mise-action remains outside the mise runtime group", async () => {
 	for (const dependency of actions) {
 		const matched = await applyPackageRules(mergeChildConfig(config, dependency), "test");
 		assert.notEqual(matched.groupName, "mise");
+		assert.equal(matched.internalChecksFilter, "flexible");
 	}
 });
 
-const selectUpdate = async (dependency: Dependency, ageHours: number) => {
+interface ReleaseFixture {
+	ageHours: number;
+	version: string;
+}
+
+const selectUpdate = async (dependency: Dependency, releases: ReleaseFixture[]) => {
 	const dependencyConfig = await applyPackageRules(
 		mergeChildConfig(config, { ...dependency, currentVersion: "2026.11.0" }),
 		"test",
 	);
-	const timestamp =
-		dependency.datasource === "docker"
-			? {}
-			: { releaseTimestamp: new Date(Date.now() - ageHours * 60 * 60 * 1000).toISOString() };
-	const selected = await filterInternalChecks(dependencyConfig, semver, "test", [
-		{
-			releaseTimestamp: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
-			version: "2026.11.1",
-		},
-		{ version: "2026.11.2", ...timestamp },
-	]);
-	// Before the fix, native uses-with selects the older 2026.11.1 here.
-	assert.equal(selected.release?.version, "2026.11.2");
+	const selected = await filterInternalChecks(
+		dependencyConfig,
+		semver,
+		"test",
+		releases.map(({ ageHours, version }) => ({
+			version,
+			...(dependency.datasource === "docker"
+				? {}
+				: { releaseTimestamp: new Date(Date.now() - ageHours * 60 * 60 * 1000).toISOString() }),
+		})),
+	);
+	assert.ok(selected.release);
 	return {
 		...selected.release,
 		newValue: selected.release.version,
@@ -191,33 +196,56 @@ const selectUpdate = async (dependency: Dependency, ageHours: number) => {
 	};
 };
 
-for (const [ageHours, stabilityStatus] of [
-	[1, "yellow"],
-	[48, "green"],
-] as const) {
-	test(`native pins, custom pins and Docker stay synchronized at ${ageHours} hours`, async () => {
-		const packageFiles: Record<string, { deps: unknown[]; packageFile: string }[]> = {};
-		for (const dependency of miseDependencies) {
-			const files = (packageFiles[dependency.manager] ??= []);
-			files.push({
-				deps: [
-					{
-						...dependency,
-						updates: [await selectUpdate(dependency, ageHours)],
-					},
-				],
-				packageFile: dependency.packageFile,
-			});
-		}
-		const { branches } = await branchifyUpgrades(config, packageFiles);
-		assert.equal(branches.length, 1);
-		const [branch] = branches;
-		assert.partialDeepStrictEqual(branch, {
-			branchName: "renovate/mise",
-			platformAutomerge: false,
-			prCreation: "immediate",
+const makeBranch = async (releases: ReleaseFixture[]) => {
+	const packageFiles: Record<string, { deps: unknown[]; packageFile: string }[]> = {};
+	for (const dependency of miseDependencies) {
+		const files = (packageFiles[dependency.manager] ??= []);
+		files.push({
+			deps: [{ ...dependency, updates: [await selectUpdate(dependency, releases)] }],
+			packageFile: dependency.packageFile,
 		});
-		assert.equal(branch.upgrades.length, miseDependencies.length);
-		assert.equal((await computeInternalChecksStatus(branch)).stabilityStatus, stabilityStatus);
+	}
+	const { branches } = await branchifyUpgrades(config, packageFiles);
+	assert.equal(branches.length, 1);
+	const [branch] = branches;
+	assert.partialDeepStrictEqual(branch, {
+		branchName: "renovate/mise",
+		platformAutomerge: false,
+		prCreation: "immediate",
 	});
-}
+	assert.equal((await computeInternalChecksStatus(branch)).stabilityStatus, "green");
+	return branch;
+};
+
+test("Docker updates first and aged mise pins join the same branch", async () => {
+	const young = await makeBranch([{ ageHours: 1, version: "2026.11.1" }]);
+	assert.equal(young.upgrades.length, 1);
+	assert.partialDeepStrictEqual(young.upgrades[0], {
+		datasource: "docker",
+		newVersion: "2026.11.1",
+	});
+
+	const mature = await makeBranch([{ ageHours: 48, version: "2026.11.1" }]);
+	assert.equal(mature.branchName, young.branchName);
+	assert.equal(mature.upgrades.length, miseDependencies.length);
+	for (const upgrade of mature.upgrades) {
+		assert.equal(upgrade.newVersion, "2026.11.1");
+		assert.equal(upgrade.pendingChecks, false);
+	}
+});
+
+test("frequent timestamped releases select a mature pin while Docker can keep moving ahead", async () => {
+	// A release every six hours: only .1 has completed the one-day cooldown.
+	const branch = await makeBranch(
+		[25, 19, 13, 7, 1].map((ageHours, index) => ({
+			ageHours,
+			version: `2026.11.${index + 1}`,
+		})),
+	);
+	assert.equal(branch.upgrades.length, miseDependencies.length);
+	for (const upgrade of branch.upgrades) {
+		assert.equal(upgrade.newVersion, upgrade.datasource === "docker" ? "2026.11.5" : "2026.11.1");
+		assert.equal(upgrade.pendingChecks, false);
+	}
+	// Renovate's release-age gate is green here. Consumer CI must catch the mismatch.
+});

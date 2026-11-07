@@ -1,4 +1,4 @@
-// Exercise Renovate's real update pipeline; replace only the platform I/O boundary.
+// Exercise Renovate's real selection/grouping/PR pipeline with fixture releases and platform I/O.
 /* oxlint-disable import/no-nodejs-modules, node/no-sync */
 // Keep each sequential integration scenario and its assertions together.
 /* oxlint-disable eslint/max-statements, eslint/max-lines-per-function, eslint/no-loop-func */
@@ -34,6 +34,7 @@ const { branchifyUpgrades } = await loadRenovate("./workers/repository/updates/b
 const { computeInternalChecksStatus, setStability } = await loadRenovate(
 	"./workers/repository/update/branch/status-checks.js",
 );
+const { processBranch } = await loadRenovate("./workers/repository/update/branch/index.js");
 const { ensurePr } = await loadRenovate("./workers/repository/update/pr/index.js");
 const { checkAutoMerge } = await loadRenovate("./workers/repository/update/pr/automerge.js");
 
@@ -96,6 +97,7 @@ platformApis.set("github", {
 		createdPrOptions.push(request.platformPrOptions);
 		return Promise.resolve({ number: 1 });
 	},
+	findPr: () => Promise.resolve(null),
 	getBranchPr: () => Promise.resolve(null),
 	getBranchStatus: () => Promise.resolve(ciStatus === "green" ? stabilityStatus : ciStatus),
 	getBranchStatusCheck: () => Promise.resolve(stabilityStatus),
@@ -112,6 +114,8 @@ platformApis.set("github", {
 platformScmImpls.set(
 	"github",
 	class {
+		// oxlint-disable-next-line eslint/class-methods-use-this
+		branchExists = () => Promise.resolve(false);
 		// The SCM boundary has no state; production behavior is not stubbed elsewhere.
 		// oxlint-disable-next-line eslint/class-methods-use-this
 		isBranchModified = () => Promise.resolve(false);
@@ -121,7 +125,7 @@ setPlatformApi("github");
 
 const hoursAgo = (hours: number) => new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
 
-const makeBranch = async (dependency: Dependency, ageHours?: number) => {
+const makeBranch = async (dependency: Dependency, ageHours?: number, includeMature = true) => {
 	const dependencyConfig = await applyPackageRules(
 		mergeChildConfig(config, {
 			...dependency,
@@ -131,19 +135,18 @@ const makeBranch = async (dependency: Dependency, ageHours?: number) => {
 		"test",
 	);
 	assert.partialDeepStrictEqual(dependencyConfig, {
-		internalChecksFilter: "none",
+		internalChecksFilter: dependency.packageName === "jdx/mise" ? "strict" : "flexible",
 		platformAutomerge: false,
 		prCreation: "immediate",
 	});
 	const selected = await filterInternalChecks(dependencyConfig, semver, "test", [
-		{ releaseTimestamp: hoursAgo(72), version: "1.0.1" },
+		...(includeMature ? [{ releaseTimestamp: hoursAgo(72), version: "1.0.1" }] : []),
 		{
 			...(typeof ageHours === "undefined" ? {} : { releaseTimestamp: hoursAgo(ageHours) }),
 			version: "1.0.2",
 		},
 	]);
-	assert.equal(selected.release?.version, "1.0.2");
-	assert.equal(selected.pendingChecks, false);
+	assert.ok(selected.release);
 	const { branches } = await branchifyUpgrades(config, {
 		[dependency.manager]: [
 			{
@@ -155,8 +158,8 @@ const makeBranch = async (dependency: Dependency, ageHours?: number) => {
 						updates: [
 							{
 								...selected.release,
-								newValue: "1.0.2",
-								newVersion: "1.0.2",
+								newValue: selected.release.version,
+								newVersion: selected.release.version,
 								pendingChecks: selected.pendingChecks,
 								updateType: "patch",
 							},
@@ -180,11 +183,7 @@ const makeBranch = async (dependency: Dependency, ageHours?: number) => {
 	assert.equal(releaseBranches.length, 1);
 	const [branch] = releaseBranches;
 	assert.equal(branch.upgrades.length, 1);
-	assert.partialDeepStrictEqual(branch, {
-		automerge: true,
-		platformAutomerge: false,
-		prCreation: "immediate",
-	});
+	assert.equal(branch.automerge, true);
 	Object.assign(branch, await computeInternalChecksStatus(branch), {
 		isConflicted: false,
 		pruneBranchAfterAutomerge: false,
@@ -193,38 +192,62 @@ const makeBranch = async (dependency: Dependency, ageHours?: number) => {
 };
 
 for (const dependency of dependencies) {
-	test(`${dependency.manager}/${dependency.datasource}: PR before cooldown, merge after cooldown`, async () => {
+	const waitsForMise = dependency.packageName === "jdx/mise";
+	test(`${dependency.manager}/${dependency.datasource}: ${waitsForMise ? "wait for mise" : "create an early PR"} if all releases are young`, async () => {
 		stabilityStatus = "green";
 		ciStatus = "green";
 		mergeCalls = 0;
 		createdPrOptions.length = 0;
-		const young = await makeBranch(dependency, 1);
+		const young = await makeBranch(dependency, 1, false);
+		assert.equal(young.pendingChecks, waitsForMise);
 		assert.equal(young.stabilityStatus, "yellow");
-		await setStability(young);
-		const result = await ensurePr(young);
+		if (waitsForMise) {
+			assert.equal((await processBranch(young)).result, "pending");
+			assert.equal(createdPrOptions.length, 0);
+		} else {
+			await setStability(young);
+			const result = await ensurePr(young);
+			assert.equal(result.type, "with-pr");
+			assert.equal(createdPrOptions.length, 1);
+			assert.equal(createdPrOptions[0]?.usePlatformAutomerge, false);
+			assert.partialDeepStrictEqual(await checkAutoMerge(result.pr, young), {
+				automerged: false,
+				prAutomergeBlockReason: "BranchNotGreen",
+			});
+			assert.equal(mergeCalls, 0);
+		}
+	});
+
+	test(`${dependency.manager}/${dependency.datasource}: select a mature release despite a newer pending release`, async () => {
+		stabilityStatus = "green";
+		ciStatus = "green";
+		mergeCalls = 0;
+		createdPrOptions.length = 0;
+		const mature = await makeBranch(dependency, 1);
+		assert.equal(mature.upgrades[0].newVersion, "1.0.1");
+		assert.equal(mature.pendingChecks, false);
+		assert.equal(mature.stabilityStatus, "green");
+		await setStability(mature);
+		const result = await ensurePr(mature);
 		assert.equal(result.type, "with-pr");
 		assert.equal(createdPrOptions.length, 1);
 		assert.equal(createdPrOptions[0]?.usePlatformAutomerge, false);
-		assert.partialDeepStrictEqual(await checkAutoMerge(result.pr, young), {
-			automerged: false,
-			prAutomergeBlockReason: "BranchNotGreen",
-		});
-		assert.equal(mergeCalls, 0);
-
-		const mature = await makeBranch(dependency, 48);
-		assert.equal(mature.stabilityStatus, "green");
-		await setStability(mature);
 		ciStatus = "red";
 		assert.equal((await checkAutoMerge(result.pr, mature)).automerged, false);
 		assert.equal(mergeCalls, 0);
 		ciStatus = "green";
 		assert.equal((await checkAutoMerge(result.pr, mature)).automerged, true);
 		assert.equal(mergeCalls, 1);
+
+		const caughtUp = await makeBranch(dependency, 48);
+		assert.equal(caughtUp.upgrades[0].newVersion, "1.0.2");
+		assert.equal(caughtUp.stabilityStatus, "green");
 	});
 }
 
 test("missing timestamps retain the existing optional-timestamp behavior", async () => {
 	const branch = await makeBranch(dependencies[0]!);
+	assert.equal(branch.upgrades[0].newVersion, "1.0.2");
 	assert.equal(branch.stabilityStatus, "green");
 });
 
@@ -244,19 +267,11 @@ for (const [datasource, packageName] of [
 			1,
 		);
 		assert.equal(branch.upgrades[0].minimumReleaseAge, "0 days");
+		assert.equal(branch.upgrades[0].newVersion, "1.0.2");
+		assert.equal(branch.pendingChecks, false);
 		assert.equal(branch.stabilityStatus, "green");
 	});
 }
-
-test("one young upgrade keeps a mixed group pending", async () => {
-	const mature = await makeBranch(dependencies[0]!, 48);
-	const young = await makeBranch(dependencies[1]!, 1);
-	const status = await computeInternalChecksStatus({
-		...mature,
-		upgrades: [...mature.upgrades, ...young.upgrades],
-	});
-	assert.equal(status.stabilityStatus, "yellow");
-});
 
 for (const [updateType, automerge] of [
 	["major", false],

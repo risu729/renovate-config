@@ -55,14 +55,18 @@ test.each([
 	expect(matches).toBe(exempt);
 });
 
-test("all dependencies create PRs while pending, without delegating automerge", () => {
+test("dependencies use flexible filtering without delegating automerge", () => {
 	expect(config).toMatchObject({
-		internalChecksFilter: "none",
+		internalChecksFilter: "flexible",
 		platformAutomerge: false,
 		prCreation: "immediate",
 	});
 	for (const rule of config.packageRules) {
-		expect(rule).not.toHaveProperty("internalChecksFilter");
+		if (rule.groupName === "mise") {
+			expect(rule.internalChecksFilter).toBe("strict");
+		} else {
+			expect(rule).not.toHaveProperty("internalChecksFilter");
+		}
 		expect(rule).not.toHaveProperty("platformAutomerge");
 		expect(rule).not.toHaveProperty("prCreation");
 	}

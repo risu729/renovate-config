@@ -15,7 +15,7 @@
 	],
 	"minimumReleaseAge": "1 day",
 	"minimumReleaseAgeBehaviour": "timestamp-optional",
-	"internalChecksFilter": "none",
+	"internalChecksFilter": "flexible",
 	"prCreation": "immediate",
 	"platformAutomerge": false,
 	"labels": [
@@ -240,6 +240,7 @@
 				"jdx/mise",
 				"ghcr.io/jdx/mise"
 			],
+			"internalChecksFilter": "strict",
 			"groupName": "mise",
 			"groupSlug": "mise",
 			"groupSingleUpdates": true,
