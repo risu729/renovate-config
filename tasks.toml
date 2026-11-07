@@ -9,6 +9,9 @@ run = "hk {% if usage.lint %}check{% else %}fix{% endif %} --all --no-progress -
 description = "Run hk linters and formatters."
 
 [build]
+sources = ["src/default.json5", "mise.toml", "mise.lock"]
+outputs = ["default.json"]
+cache = { enabled = true, env = ["NODE_OPTIONS", "NODE_PATH"] }
 run = "json5 src/default.json5 --out-file default.json --space t && printf '\\n' >> default.json"
 description = "Build default.json from src/default.json5."
 

@@ -34,6 +34,10 @@ or to use a specific version:
 
 ## Development
 
+Run `mise run build` to build `default.json` from `src/default.json5`. The task reuses
+unchanged inputs and restores missing or modified output from its local cache.
+Use `mise run --force build` to regenerate the file explicitly.
+
 Run `mise run test` for the Bun unit tests and the Node integration tests. The
 integration tests use the mise-pinned Renovate installation to extract fixtures,
 apply the preset, and verify grouping and release-age checks without remote lookups.
