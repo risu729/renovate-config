@@ -42,9 +42,6 @@ const { init } = await loadRenovate("./logger/index.js");
 const { extractPackageFile: extractActions } = await loadRenovate(
 	"./modules/manager/github-actions/extract.js",
 );
-const { extractPackageFile: extractJsonata } = await loadRenovate(
-	"./modules/manager/custom/jsonata/index.js",
-);
 const { extractPackageFile: extractDocker } = await loadRenovate(
 	"./modules/manager/dockerfile/extract.js",
 );
@@ -68,10 +65,11 @@ Object.assign(config, {
 	semanticCommits: "disabled",
 	warnings: [],
 });
-const customManager = preset.customManagers.find(
-	(manager) => manager.description === "Updates mise versions in GitHub Actions",
+assert.ok(
+	!preset.customManagers.some(
+		(manager) => manager.description === "Updates mise versions in GitHub Actions",
+	),
 );
-assert.ok(customManager);
 
 const dependencies: Dependency[] = [];
 for (const [fixture, packageFile] of [
@@ -85,24 +83,13 @@ for (const [fixture, packageFile] of [
 		{},
 	);
 	assert.ok(native);
-	const custom: { deps: ExtractedDependency[] } | null = await extractJsonata(
-		content,
-		packageFile,
-		customManager,
-	);
-	assert.ok(custom);
-	for (const [manager, extracted] of [
-		["github-actions", native],
-		["jsonata", custom],
-	] as const) {
-		for (const dependency of extracted.deps) {
-			dependencies.push({
-				...dependency,
-				manager,
-				packageFile,
-				packageName: dependency.packageName ?? dependency.depName,
-			});
-		}
+	for (const dependency of native.deps) {
+		dependencies.push({
+			...dependency,
+			manager: "github-actions",
+			packageFile,
+			packageName: dependency.packageName ?? dependency.depName,
+		});
 	}
 }
 const docker: { deps: ExtractedDependency[] } | null = extractDocker(
@@ -122,22 +109,26 @@ for (const dependency of docker.deps) {
 const miseDependencies = dependencies.filter((dependency) =>
 	["jdx/mise", "ghcr.io/jdx/mise"].includes(dependency.packageName),
 );
-assert.equal(miseDependencies.length, 5);
+assert.equal(miseDependencies.length, 3);
 
 for (const packageFile of [".github/workflows/ci.yml", "action.yml"]) {
 	test(`native extraction and grouping: ${packageFile}`, async () => {
-		const dependency = miseDependencies.find(
+		const extracted = miseDependencies.filter(
 			(candidate) =>
 				candidate.manager === "github-actions" && candidate.packageFile === packageFile,
 		);
+		assert.equal(extracted.length, 1);
+		const [dependency] = extracted;
 		assert.ok(dependency);
 		assert.partialDeepStrictEqual(dependency, {
+			currentDigest: "a".repeat(64),
 			currentValue: "2026.11.0",
 			datasource: "github-release-attachments",
 			depType: "uses-with",
 		});
 		const matched = await applyPackageRules(mergeChildConfig(config, dependency), "test");
 		assert.partialDeepStrictEqual(matched, {
+			currentDigest: "a".repeat(64),
 			datasource: dependency.datasource,
 			groupName: "mise",
 			groupSlug: "mise",
@@ -145,21 +136,38 @@ for (const packageFile of [".github/workflows/ci.yml", "action.yml"]) {
 			minimumReleaseAge: "1 day",
 			platformAutomerge: false,
 		});
-		if (packageFile === ".github/workflows/ci.yml") {
-			assert.equal(dependency.currentDigest, "a".repeat(64));
-			assert.equal(matched.currentDigest, dependency.currentDigest);
-		}
+		const major = await applyPackageRules(
+			mergeChildConfig(config, { ...dependency, updateType: "major" }),
+			"test",
+		);
+		assert.equal(major.automerge, true);
 	});
 }
 
-test("mise-action remains outside the mise runtime group", async () => {
+test("mise-action stays outside native pin automerge", async () => {
 	const actions = dependencies.filter((dependency) => dependency.packageName === "jdx/mise-action");
 	assert.equal(actions.length, 2);
 	for (const dependency of actions) {
-		const matched = await applyPackageRules(mergeChildConfig(config, dependency), "test");
+		const matched = await applyPackageRules(
+			mergeChildConfig(config, { ...dependency, updateType: "major" }),
+			"test",
+		);
 		assert.notEqual(matched.groupName, "mise");
 		assert.equal(matched.internalChecksFilter, "flexible");
+		assert.notEqual(matched.automerge, true);
 	}
+});
+
+test("Docker stays outside native pin automerge", async () => {
+	const dockerDependency = miseDependencies.find(
+		(dependency) => dependency.manager === "dockerfile",
+	);
+	assert.ok(dockerDependency);
+	const matchedDocker = await applyPackageRules(
+		mergeChildConfig(config, { ...dockerDependency, updateType: "major" }),
+		"test",
+	);
+	assert.notEqual(matchedDocker.automerge, true);
 });
 
 interface ReleaseFixture {
