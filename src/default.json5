@@ -65,22 +65,6 @@
 		},
 		{
 			customType: "jsonata",
-			description: "Updates mise versions in GitHub Actions",
-			managerFilePatterns: [
-				// ref: https://docs.renovatebot.com/modules/manager/github-actions/#file-matching
-				"/(^|/)(workflow-templates|\\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\\.ya?ml$/",
-				"/(^|/)action\\.ya?ml$/",
-			],
-			fileFormat: "yaml",
-			datasourceTemplate: "github-releases",
-			depNameTemplate: "mise",
-			packageNameTemplate: "jdx/mise",
-			matchStrings: [
-				'($append($.jobs.*.steps, $.runs.steps))[$substringBefore(uses, "@") = "jdx/mise-action"].with.version.{ "currentValue": $ }',
-			],
-		},
-		{
-			customType: "jsonata",
 			description: "Updates compatibility_date in wrangler.json",
 			managerFilePatterns: ["/(^|/)wrangler\\.jsonc?$/"],
 			fileFormat: "json",
@@ -221,6 +205,14 @@
 			matchDepNames: ["mise"],
 			// mise uses Calver, so allow automerge for all versions
 			// ref: https://mise.jdx.dev/roadmap.html#versioning
+			automerge: true,
+		},
+		{
+			// The native GitHub Actions manager names with.version jdx/mise.
+			// Preserve all-version automerge without extending it to mise-action or Docker.
+			matchManagers: ["github-actions"],
+			matchDatasources: ["github-release-attachments"],
+			matchPackageNames: ["jdx/mise"],
 			automerge: true,
 		},
 		// set semantic commit types
