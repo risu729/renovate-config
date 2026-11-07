@@ -23,10 +23,10 @@
 	// some datasources and update types (e.g. lockFileMaintenance) have none
 	// ref: https://docs.renovatebot.com/configuration-options/#minimumreleaseagebehaviour
 	minimumReleaseAgeBehaviour: "timestamp-optional",
-	// Create updates while release-age checks are pending, for every dependency.
-	// CI can start immediately; automerge must still wait for the checks to pass.
+	// Prefer a mature release over newer pending versions. If every candidate is
+	// pending, still create an early PR and wait for its checks before automerging.
 	// ref: https://docs.renovatebot.com/configuration-options/#internalchecksfilter
-	internalChecksFilter: "none",
+	internalChecksFilter: "flexible",
 	prCreation: "immediate",
 	// Renovate must enforce its age check even when it is not a required check
 	// in the hosting platform's branch protection rules.
@@ -254,6 +254,10 @@
 			// The native GitHub Actions manager uses release attachments for with.version/sha256.
 			matchDatasources: ["github-releases", "github-release-attachments", "github-tags", "docker"],
 			matchPackageNames: ["jdx/mise", "ghcr.io/jdx/mise"],
+			// Let Docker update first; timestamped runtime pins join after the cooldown.
+			// Keep the simpler selection behavior until container timestamps are available.
+			// ref: https://github.com/risu729/renovate-config/issues/2898
+			internalChecksFilter: "strict",
 			groupName: "mise",
 			groupSlug: "mise",
 			groupSingleUpdates: true,

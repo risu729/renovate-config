@@ -34,16 +34,16 @@ test.each(["jdx/mise-action", "jdx/hk", "ghcr.io/jdx/mise-action", "ghcr.io/othe
 	},
 );
 
-test("mise grouping retains the release cooldown without dropping young version pins", () => {
+test("mise grouping uses strict release filtering while retaining the release cooldown", () => {
 	expect(config.minimumReleaseAge).toBe("1 day");
 	expect(config.minimumReleaseAgeBehaviour).toBe("timestamp-optional");
 	expect(group).not.toHaveProperty("minimumReleaseAge");
-	// All dependencies now inherit the same early-PR policy.
-	expect(group).not.toHaveProperty("internalChecksFilter");
+	// Runtime pins wait for age; unrelated dependencies can still create early PRs.
+	expect(group?.internalChecksFilter).toBe("strict");
 	expect(group).not.toHaveProperty("platformAutomerge");
 	expect(group).not.toHaveProperty("prCreation");
 	expect(config).toMatchObject({
-		internalChecksFilter: "none",
+		internalChecksFilter: "flexible",
 		platformAutomerge: false,
 		prCreation: "immediate",
 	});
