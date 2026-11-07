@@ -15,7 +15,7 @@
 		// replaced by the minimumReleaseAge below, which covers every datasource
 		"security:minimumReleaseAgeNpm",
 	],
-	// wait one day after a release before automerging, for every datasource
+	// wait one day after a timestamped release before creating its update branch
 	// mise also refuses young tool versions when generating mise.lock (24h by default)
 	// ref: https://mise.jdx.dev/configuration/settings.html#minimum_release_age
 	minimumReleaseAge: "1 day",
@@ -24,9 +24,9 @@
 	// ref: https://docs.renovatebot.com/configuration-options/#minimumreleaseagebehaviour
 	minimumReleaseAgeBehaviour: "timestamp-optional",
 	// Prefer a mature release over newer pending versions. If every candidate is
-	// pending, still create an early PR and wait for its checks before automerging.
+	// pending, wait instead of creating a branch and PR during the cooldown.
 	// ref: https://docs.renovatebot.com/configuration-options/#internalchecksfilter
-	internalChecksFilter: "flexible",
+	internalChecksFilter: "strict",
 	prCreation: "immediate",
 	// Renovate must enforce its age check even when it is not a required check
 	// in the hosting platform's branch protection rules.

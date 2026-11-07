@@ -158,7 +158,7 @@ test("mise-action remains outside the mise runtime group", async () => {
 	for (const dependency of actions) {
 		const matched = await applyPackageRules(mergeChildConfig(config, dependency), "test");
 		assert.notEqual(matched.groupName, "mise");
-		assert.equal(matched.internalChecksFilter, "flexible");
+		assert.equal(matched.internalChecksFilter, "strict");
 	}
 });
 

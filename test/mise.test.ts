@@ -38,12 +38,12 @@ test("mise grouping uses strict release filtering while retaining the release co
 	expect(config.minimumReleaseAge).toBe("1 day");
 	expect(config.minimumReleaseAgeBehaviour).toBe("timestamp-optional");
 	expect(group).not.toHaveProperty("minimumReleaseAge");
-	// Runtime pins wait for age; unrelated dependencies can still create early PRs.
+	// Runtime pins retain the same strict filtering as other timestamped releases.
 	expect(group?.internalChecksFilter).toBe("strict");
 	expect(group).not.toHaveProperty("platformAutomerge");
 	expect(group).not.toHaveProperty("prCreation");
 	expect(config).toMatchObject({
-		internalChecksFilter: "flexible",
+		internalChecksFilter: "strict",
 		platformAutomerge: false,
 		prCreation: "immediate",
 	});

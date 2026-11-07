@@ -92,6 +92,12 @@ let stabilityStatus = "green";
 let ciStatus = "green";
 let mergeCalls = 0;
 const createdPrOptions: { usePlatformAutomerge: boolean }[] = [];
+const resetPlatform = () => {
+	stabilityStatus = "green";
+	ciStatus = "green";
+	mergeCalls = 0;
+	createdPrOptions.length = 0;
+};
 platformApis.set("github", {
 	createPr: (request: { platformPrOptions: { usePlatformAutomerge: boolean } }) => {
 		createdPrOptions.push(request.platformPrOptions);
@@ -135,7 +141,7 @@ const makeBranch = async (dependency: Dependency, ageHours?: number, includeMatu
 		"test",
 	);
 	assert.partialDeepStrictEqual(dependencyConfig, {
-		internalChecksFilter: dependency.packageName === "jdx/mise" ? "strict" : "flexible",
+		internalChecksFilter: "strict",
 		platformAutomerge: false,
 		prCreation: "immediate",
 	});
@@ -192,37 +198,21 @@ const makeBranch = async (dependency: Dependency, ageHours?: number, includeMatu
 };
 
 for (const dependency of dependencies) {
-	const waitsForMise = dependency.packageName === "jdx/mise";
-	test(`${dependency.manager}/${dependency.datasource}: ${waitsForMise ? "wait for mise" : "create an early PR"} if all releases are young`, async () => {
-		stabilityStatus = "green";
-		ciStatus = "green";
-		mergeCalls = 0;
-		createdPrOptions.length = 0;
+	test(`${dependency.manager}/${dependency.datasource}: create no branch or PR if all timestamped releases are young`, async () => {
+		resetPlatform();
 		const young = await makeBranch(dependency, 1, false);
-		assert.equal(young.pendingChecks, waitsForMise);
+		assert.equal(young.pendingChecks, true);
 		assert.equal(young.stabilityStatus, "yellow");
-		if (waitsForMise) {
-			assert.equal((await processBranch(young)).result, "pending");
-			assert.equal(createdPrOptions.length, 0);
-		} else {
-			await setStability(young);
-			const result = await ensurePr(young);
-			assert.equal(result.type, "with-pr");
-			assert.equal(createdPrOptions.length, 1);
-			assert.equal(createdPrOptions[0]?.usePlatformAutomerge, false);
-			assert.partialDeepStrictEqual(await checkAutoMerge(result.pr, young), {
-				automerged: false,
-				prAutomergeBlockReason: "BranchNotGreen",
-			});
-			assert.equal(mergeCalls, 0);
-		}
+		assert.deepStrictEqual(await processBranch(young), {
+			branchExists: false,
+			result: "pending",
+		});
+		assert.equal(createdPrOptions.length, 0);
+		assert.equal(mergeCalls, 0);
 	});
 
 	test(`${dependency.manager}/${dependency.datasource}: select a mature release despite a newer pending release`, async () => {
-		stabilityStatus = "green";
-		ciStatus = "green";
-		mergeCalls = 0;
-		createdPrOptions.length = 0;
+		resetPlatform();
 		const mature = await makeBranch(dependency, 1);
 		assert.equal(mature.upgrades[0].newVersion, "1.0.1");
 		assert.equal(mature.pendingChecks, false);
@@ -243,13 +233,18 @@ for (const dependency of dependencies) {
 		assert.equal(caughtUp.upgrades[0].newVersion, "1.0.2");
 		assert.equal(caughtUp.stabilityStatus, "green");
 	});
-}
 
-test("missing timestamps retain the existing optional-timestamp behavior", async () => {
-	const branch = await makeBranch(dependencies[0]!);
-	assert.equal(branch.upgrades[0].newVersion, "1.0.2");
-	assert.equal(branch.stabilityStatus, "green");
-});
+	test(`${dependency.manager}/${dependency.datasource}: missing timestamps remain eligible for an immediate PR`, async () => {
+		resetPlatform();
+		const branch = await makeBranch(dependency);
+		assert.equal(branch.upgrades[0].newVersion, "1.0.2");
+		assert.equal(branch.pendingChecks, false);
+		assert.equal(branch.stabilityStatus, "green");
+		await setStability(branch);
+		assert.equal((await ensurePr(branch)).type, "with-pr");
+		assert.equal(createdPrOptions.length, 1);
+	});
+}
 
 for (const [datasource, packageName] of [
 	["github-releases", "risu729/hk-config"],
@@ -257,6 +252,7 @@ for (const [datasource, packageName] of [
 	["npm", "@risu729/tsconfigs"],
 ]) {
 	test(`owned-package exception remains immediate: ${packageName}`, async () => {
+		resetPlatform();
 		const branch = await makeBranch(
 			{
 				...dependencies[0]!,
@@ -265,11 +261,15 @@ for (const [datasource, packageName] of [
 				packageName: packageName!,
 			},
 			1,
+			false,
 		);
 		assert.equal(branch.upgrades[0].minimumReleaseAge, "0 days");
 		assert.equal(branch.upgrades[0].newVersion, "1.0.2");
 		assert.equal(branch.pendingChecks, false);
 		assert.equal(branch.stabilityStatus, "green");
+		await setStability(branch);
+		assert.equal((await ensurePr(branch)).type, "with-pr");
+		assert.equal(createdPrOptions.length, 1);
 	});
 }
 
