@@ -120,7 +120,7 @@ for (const dependency of docker.deps) {
 	});
 }
 const miseDependencies = dependencies.filter((dependency) =>
-	["jdx/mise", "ghcr.io/jdx/mise"].includes(dependency.packageName),
+	["jdx/mise", "jdxcode/mise"].includes(dependency.packageName),
 );
 assert.equal(miseDependencies.length, 5);
 
@@ -167,22 +167,26 @@ interface ReleaseFixture {
 	version: string;
 }
 
-const selectUpdate = async (dependency: Dependency, releases: ReleaseFixture[]) => {
+// Docker Hub tags carry tag_last_pushed timestamps, so the Docker image
+// (jdxcode/mise) ages like every other mise dependency.
+const selectRelease = async (dependency: Dependency, releases: ReleaseFixture[]) => {
 	const dependencyConfig = await applyPackageRules(
 		mergeChildConfig(config, { ...dependency, currentVersion: "2026.11.0" }),
 		"test",
 	);
-	const selected = await filterInternalChecks(
+	return filterInternalChecks(
 		dependencyConfig,
 		semver,
 		"test",
 		releases.map(({ ageHours, version }) => ({
+			releaseTimestamp: new Date(Date.now() - ageHours * 60 * 60 * 1000).toISOString(),
 			version,
-			...(dependency.datasource === "docker"
-				? {}
-				: { releaseTimestamp: new Date(Date.now() - ageHours * 60 * 60 * 1000).toISOString() }),
 		})),
 	);
+};
+
+const selectUpdate = async (dependency: Dependency, releases: ReleaseFixture[]) => {
+	const selected = await selectRelease(dependency, releases);
 	assert.ok(selected.release);
 	return {
 		...selected.release,
@@ -217,24 +221,25 @@ const makeBranch = async (releases: ReleaseFixture[]) => {
 	return branch;
 };
 
-test("Docker updates first and aged mise pins join the same branch", async () => {
-	const young = await makeBranch([{ ageHours: 1, version: "2026.11.1" }]);
-	assert.equal(young.upgrades.length, 1);
-	assert.partialDeepStrictEqual(young.upgrades[0], {
-		datasource: "docker",
-		newVersion: "2026.11.1",
-	});
+test("a young release stays pending for every mise dependency, including the Docker image", async () => {
+	for (const dependency of miseDependencies) {
+		const selected = await selectRelease(dependency, [{ ageHours: 1, version: "2026.11.1" }]);
+		// Strict filtering keeps the only candidate but marks it pending, so no branch is created.
+		assert.equal(selected.release?.version, "2026.11.1");
+		assert.equal(selected.pendingChecks, true, `${dependency.manager}: ${dependency.packageFile}`);
+	}
+});
 
-	const mature = await makeBranch([{ ageHours: 48, version: "2026.11.1" }]);
-	assert.equal(mature.branchName, young.branchName);
-	assert.equal(mature.upgrades.length, miseDependencies.length);
-	for (const upgrade of mature.upgrades) {
+test("a mature release updates every mise dependency in the same branch", async () => {
+	const branch = await makeBranch([{ ageHours: 48, version: "2026.11.1" }]);
+	assert.equal(branch.upgrades.length, miseDependencies.length);
+	for (const upgrade of branch.upgrades) {
 		assert.equal(upgrade.newVersion, "2026.11.1");
 		assert.equal(upgrade.pendingChecks, false);
 	}
 });
 
-test("frequent timestamped releases select a mature pin while Docker can keep moving ahead", async () => {
+test("frequent releases select the same mature version for pins and the Docker image", async () => {
 	// A release every six hours: only .1 has completed the one-day cooldown.
 	const branch = await makeBranch(
 		[25, 19, 13, 7, 1].map((ageHours, index) => ({
@@ -244,8 +249,7 @@ test("frequent timestamped releases select a mature pin while Docker can keep mo
 	);
 	assert.equal(branch.upgrades.length, miseDependencies.length);
 	for (const upgrade of branch.upgrades) {
-		assert.equal(upgrade.newVersion, upgrade.datasource === "docker" ? "2026.11.5" : "2026.11.1");
+		assert.equal(upgrade.newVersion, "2026.11.1");
 		assert.equal(upgrade.pendingChecks, false);
 	}
-	// Renovate's release-age gate is green here. Consumer CI must catch the mismatch.
 });

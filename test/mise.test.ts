@@ -11,13 +11,13 @@ const githubActionsExpression = config.customManagers
 
 const group = config.packageRules.find((rule) => rule.groupName === "mise");
 
-test("mise version pins and the official container share one stable group", () => {
+test("mise version pins and the Docker Hub container share one stable group", () => {
 	expect(group).toMatchObject({
 		groupName: "mise",
 		groupSingleUpdates: true,
 		groupSlug: "mise",
 		matchDatasources: ["github-releases", "github-release-attachments", "github-tags", "docker"],
-		matchPackageNames: ["jdx/mise", "ghcr.io/jdx/mise"],
+		matchPackageNames: ["jdx/mise", "jdxcode/mise"],
 		separateMajorMinor: false,
 		separateMinorPatch: false,
 	});
@@ -27,12 +27,15 @@ test("mise version pins and the official container share one stable group", () =
 	expect(group).not.toHaveProperty("matchUpdateTypes");
 });
 
-test.each(["jdx/mise-action", "jdx/hk", "ghcr.io/jdx/mise-action", "ghcr.io/other/mise"])(
-	"mise grouping excludes unrelated packages: %s",
-	(packageName) => {
-		expect(group?.matchPackageNames).not.toContain(packageName);
-	},
-);
+test.each([
+	"jdx/mise-action",
+	"jdx/hk",
+	"ghcr.io/jdx/mise",
+	"jdxcode/mise-action",
+	"ghcr.io/other/mise",
+])("mise grouping excludes unrelated packages: %s", (packageName) => {
+	expect(group?.matchPackageNames).not.toContain(packageName);
+});
 
 test("mise grouping uses strict release filtering while retaining the release cooldown", () => {
 	expect(config.minimumReleaseAge).toBe("1 day");
