@@ -52,19 +52,21 @@ resolved by `npm:semantic-release` 25.0.9; `lib/default-release-rules.js`):
 - `fix` and `perf` release a patch version. A revert releases a patch only when
   its message contains `This reverts commit <sha>`, as GitHub's Revert button
   produces; a bare `revert:` header releases nothing.
-- A `BREAKING CHANGE:` footer releases a major version. The `!` form does not
-  work here: the angular header pattern in `conventional-changelog-angular`
-  (`src/parser.js`) is `/^(\w*)(?:\((.*)\))?: (.*)$/`, so `feat!:` gets no type
-  and, without a footer, releases nothing, not even a minor. Unlike hk-config,
-  always use the footer.
+- A `BREAKING CHANGE:` footer, or `!` after the type such as
+  `feat!: drop Node.js 22`, releases a major version, even with a type such as
+  `chore!:`. [`.releaserc.json`](.releaserc.json) sets `breakingHeaderPattern`
+  for both the commit analyzer and the release notes generator, and
+  `conventional-commits-parser` (6.4.0; `dist/CommitParser.js`) adds a
+  `BREAKING CHANGE` note when it matches, so the release notes list the commit
+  under BREAKING CHANGES too.
 - Other types, such as `chore`, `ci`, `docs`, `refactor` and `test`, release
   nothing. Renovate uses `chore(deps)` and `ci(deps)` here, so dependency
   updates alone do not release.
 
-Put a `BREAKING CHANGE:` footer in a commit message or in the squash commit
-message when merging; the PR description is not part of the squash commit. Tags
-look like `3.23.2`. Consumers receive a release only when Renovate updates their
-pin (see [Related Repositories](#related-repositories)).
+Put the `!` or the `BREAKING CHANGE:` footer in a commit message or in the
+squash commit message when merging; the PR description is not part of the
+squash commit. Tags look like `3.23.2`. Consumers receive a release only when
+Renovate updates their pin (see [Related Repositories](#related-repositories)).
 
 ## Change Workflow
 
