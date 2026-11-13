@@ -238,7 +238,7 @@
 			],
 			"matchPackageNames": [
 				"jdx/mise",
-				"ghcr.io/jdx/mise"
+				"jdxcode/mise"
 			],
 			"internalChecksFilter": "strict",
 			"groupName": "mise",
