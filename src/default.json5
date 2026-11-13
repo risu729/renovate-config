@@ -256,9 +256,10 @@
 			// Use the Docker Hub image (jdxcode/mise), not ghcr.io/jdx/mise. Renovate only reads
 			// Docker image release timestamps from Docker Hub, so GHCR tags skipped the cooldown
 			// and moved ahead of the GitHub release pins. mise pushes both registries from the
-			// same release build, so Docker Hub tags age together with the GitHub release.
+			// build that starts when the GitHub release is published, so the Docker Hub tag
+			// matures at most about an hour after the pins.
 			// ref: https://github.com/renovatebot/renovate/blob/d1c6992/lib/modules/datasource/docker/index.ts#L106-L109
-			// ref: https://github.com/jdx/mise/blob/a4a1996/.github/workflows/docker.yml#L38-L42
+			// ref: https://github.com/jdx/mise/blob/a4a1996/.github/workflows/docker.yml#L160-L164
 			// ref: https://github.com/risu729/renovate-config/issues/2898
 			matchPackageNames: ["jdx/mise", "jdxcode/mise"],
 			internalChecksFilter: "strict",
