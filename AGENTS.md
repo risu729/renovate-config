@@ -97,6 +97,27 @@ Renovate updates their pin (see [Related Repositories](#related-repositories)).
   [Related Repositories](#related-repositories) unless the owner says to.
 - Merging to `main` can publish a release (see [Releases](#releases)).
 
+## Configuration Defaults
+
+Do not set a configuration option to the value its tool already uses. Leave it
+unset unless the repository needs a different value. This applies to every tool
+configuration here, including the preset, `.github/renovate.json5`,
+`mise.toml`, `hk.pkl` and `tsconfig.json`. Check the default in the tool's
+source at the version in use (see [External Tools](#external-tools)), not in its
+documentation.
+
+A value equal to the default is still needed when it overrides a different value
+from an extended preset or an earlier rule, for example a `packageRules` entry
+that restores a default changed at the top level. Keep such a value and say in a
+comment what it overrides.
+
+[`test/redundant-options.integration.mts`](test/redundant-options.integration.mts)
+fails when a top-level preset option equals the value from Renovate's defaults
+and the extended presets, or when a `packageRules` option equals the resolved
+top-level value and no earlier rule, update type or manager config sets that
+option. It does not compare matchers, so an unrelated earlier rule that sets the
+same option hides a repeated value; check those by hand.
+
 ## Design Decisions
 
 Record every design decision in this repository. Nothing should live only in a
