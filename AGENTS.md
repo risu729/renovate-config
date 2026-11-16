@@ -111,6 +111,10 @@ from an extended preset or an earlier rule, for example a `packageRules` entry
 that restores a default changed at the top level. Keep such a value and say in a
 comment what it overrides.
 
+The default must be the same in every tool version the repository allows, such
+as each mise version from `min_version`. When an older allowed version has a
+different default, raise the minimum in the same change or keep the value.
+
 [`test/redundant-options.integration.mts`](test/redundant-options.integration.mts)
 fails when a top-level preset option equals the value from Renovate's defaults
 and the extended presets, or when a `packageRules` option equals the resolved
