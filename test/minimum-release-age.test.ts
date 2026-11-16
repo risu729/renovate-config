@@ -55,21 +55,14 @@ test.each([
 	expect(matches).toBe(exempt);
 });
 
-test("dependencies use strict filtering and Renovate's default platform automerge", () => {
-	expect(config).toMatchObject({
-		internalChecksFilter: "strict",
-		prCreation: "immediate",
-	});
-	// Keep Renovate's default (true). Strict filtering only raises matured releases,
-	// So GitHub-native automerge cannot skip the release cooldown.
-	expect(config).not.toHaveProperty("platformAutomerge");
-	for (const rule of config.packageRules) {
-		if (rule.groupName === "mise") {
-			expect(rule.internalChecksFilter).toBe("strict");
-		} else {
-			expect(rule).not.toHaveProperty("internalChecksFilter");
+test("dependencies keep Renovate's default filtering, PR creation and platform automerge", () => {
+	// Renovate's defaults are internalChecksFilter strict, prCreation immediate and platformAutomerge true.
+	// Strict filtering only raises matured releases, so GitHub-native automerge keeps the cooldown.
+	// The integration tests check the resolved values.
+	for (const key of ["internalChecksFilter", "platformAutomerge", "prCreation"]) {
+		expect(config).not.toHaveProperty(key);
+		for (const rule of config.packageRules) {
+			expect(rule).not.toHaveProperty(key);
 		}
-		expect(rule).not.toHaveProperty("platformAutomerge");
-		expect(rule).not.toHaveProperty("prCreation");
 	}
 });

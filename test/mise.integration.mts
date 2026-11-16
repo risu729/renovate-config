@@ -140,7 +140,6 @@ for (const packageFile of [".github/workflows/ci.yml", "action.yml"]) {
 		assert.partialDeepStrictEqual(matched, {
 			datasource: dependency.datasource,
 			groupName: "mise",
-			groupSlug: "mise",
 			internalChecksFilter: "strict",
 			minimumReleaseAge: "1 day",
 		});

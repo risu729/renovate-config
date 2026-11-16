@@ -15,8 +15,6 @@
 	],
 	"minimumReleaseAge": "1 day",
 	"minimumReleaseAgeBehaviour": "timestamp-optional",
-	"internalChecksFilter": "strict",
-	"prCreation": "immediate",
 	"labels": [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}"
@@ -239,12 +237,9 @@
 				"jdx/mise",
 				"jdxcode/mise"
 			],
-			"internalChecksFilter": "strict",
 			"groupName": "mise",
-			"groupSlug": "mise",
 			"groupSingleUpdates": true,
-			"separateMajorMinor": false,
-			"separateMinorPatch": false
+			"separateMajorMinor": false
 		},
 		{
 			"matchDepNames": [

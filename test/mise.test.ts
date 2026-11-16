@@ -15,12 +15,14 @@ test("mise version pins and the Docker Hub container share one stable group", ()
 	expect(group).toMatchObject({
 		groupName: "mise",
 		groupSingleUpdates: true,
-		groupSlug: "mise",
 		matchDatasources: ["github-releases", "github-release-attachments", "github-tags", "docker"],
 		matchPackageNames: ["jdx/mise", "jdxcode/mise"],
 		separateMajorMinor: false,
-		separateMinorPatch: false,
 	});
+	// Renovate's defaults already derive the branch name from groupName.
+	// They also keep minor and patch updates together.
+	expect(group).not.toHaveProperty("groupSlug");
+	expect(group).not.toHaveProperty("separateMinorPatch");
 	// Match package identities, including custom managers without depNameTemplate.
 	expect(group).not.toHaveProperty("matchDepNames");
 	// Also group digest-only updates and initial digest pins.
@@ -41,15 +43,12 @@ test("mise grouping uses strict release filtering while retaining the release co
 	expect(config.minimumReleaseAge).toBe("1 day");
 	expect(config.minimumReleaseAgeBehaviour).toBe("timestamp-optional");
 	expect(group).not.toHaveProperty("minimumReleaseAge");
-	// Runtime pins retain the same strict filtering as other timestamped releases.
-	expect(group?.internalChecksFilter).toBe("strict");
-	expect(group).not.toHaveProperty("platformAutomerge");
-	expect(group).not.toHaveProperty("prCreation");
-	expect(config).toMatchObject({
-		internalChecksFilter: "strict",
-		prCreation: "immediate",
-	});
-	expect(config).not.toHaveProperty("platformAutomerge");
+	// Runtime pins keep Renovate's default strict filtering like other releases.
+	// The integration test checks the resolved value.
+	for (const key of ["internalChecksFilter", "platformAutomerge", "prCreation"]) {
+		expect(group).not.toHaveProperty(key);
+		expect(config).not.toHaveProperty(key);
+	}
 });
 
 test("mise grouping preserves datasource lookup and Docker digest pinning", () => {

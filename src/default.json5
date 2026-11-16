@@ -23,11 +23,6 @@
 	// some datasources and update types (e.g. lockFileMaintenance) have none
 	// ref: https://docs.renovatebot.com/configuration-options/#minimumreleaseagebehaviour
 	minimumReleaseAgeBehaviour: "timestamp-optional",
-	// Prefer a mature release over newer pending versions. If every candidate is
-	// pending, wait instead of creating a branch and PR during the cooldown.
-	// ref: https://docs.renovatebot.com/configuration-options/#internalchecksfilter
-	internalChecksFilter: "strict",
-	prCreation: "immediate",
 	labels: [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}",
@@ -259,12 +254,9 @@
 			// ref: https://github.com/jdx/mise/blob/a4a1996/.github/workflows/docker.yml#L160-L164
 			// ref: https://github.com/risu729/renovate-config/issues/2898
 			matchPackageNames: ["jdx/mise", "jdxcode/mise"],
-			internalChecksFilter: "strict",
 			groupName: "mise",
-			groupSlug: "mise",
 			groupSingleUpdates: true,
 			separateMajorMinor: false,
-			separateMinorPatch: false,
 		},
 		{
 			matchDepNames: ["typescript", "npm:typescript"],
