@@ -1,7 +1,7 @@
 # ref: https://mise.jdx.dev/configuration.html
 #:schema https://mise.jdx.dev/schema/mise.json
 
-min_version = "2026.10.9"
+min_version = "2026.10.19"
 
 [tools]
 hk = "2.12.0"
@@ -28,7 +28,6 @@ json5 = "2.2.3"
 
 [settings]
 lockfile = true
-lockfile_mode = "generate"
 lockfile_platforms = ["linux-x64", "macos-arm64"]
 experimental = true
 auto_install_disable_tools = ["npm:renovate"]
@@ -41,8 +40,6 @@ includes = ["tasks.toml"]
 
 [deps.bun]
 auto = true
-sources = ["package.json", "bun.lock"]
-outputs = ["node_modules"]
 run = "bun install --frozen-lockfile"
 
 [hooks]
