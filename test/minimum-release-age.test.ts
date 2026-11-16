@@ -55,12 +55,14 @@ test.each([
 	expect(matches).toBe(exempt);
 });
 
-test("dependencies use strict filtering without delegating automerge", () => {
+test("dependencies use strict filtering and Renovate's default platform automerge", () => {
 	expect(config).toMatchObject({
 		internalChecksFilter: "strict",
-		platformAutomerge: false,
 		prCreation: "immediate",
 	});
+	// Keep Renovate's default (true). Strict filtering only raises matured releases,
+	// So GitHub-native automerge cannot skip the release cooldown.
+	expect(config).not.toHaveProperty("platformAutomerge");
 	for (const rule of config.packageRules) {
 		if (rule.groupName === "mise") {
 			expect(rule.internalChecksFilter).toBe("strict");

@@ -142,7 +142,6 @@ const makeBranch = async (dependency: Dependency, ageHours?: number, includeMatu
 	);
 	assert.partialDeepStrictEqual(dependencyConfig, {
 		internalChecksFilter: "strict",
-		platformAutomerge: false,
 		prCreation: "immediate",
 	});
 	const selected = await filterInternalChecks(dependencyConfig, semver, "test", [
@@ -179,7 +178,6 @@ const makeBranch = async (dependency: Dependency, ageHours?: number, includeMatu
 	// Best-practice presets can also generate a lock-file-maintenance branch.
 	for (const candidate of branches) {
 		assert.partialDeepStrictEqual(candidate, {
-			platformAutomerge: false,
 			prCreation: "immediate",
 		});
 	}
@@ -221,7 +219,7 @@ for (const dependency of dependencies) {
 		const result = await ensurePr(mature);
 		assert.equal(result.type, "with-pr");
 		assert.equal(createdPrOptions.length, 1);
-		assert.equal(createdPrOptions[0]?.usePlatformAutomerge, false);
+		assert.equal(createdPrOptions[0]?.usePlatformAutomerge, true);
 		ciStatus = "red";
 		assert.equal((await checkAutoMerge(result.pr, mature)).automerged, false);
 		assert.equal(mergeCalls, 0);
@@ -291,7 +289,6 @@ for (const [updateType, automerge] of [
 		);
 		assert.partialDeepStrictEqual(matched, {
 			automerge,
-			platformAutomerge: false,
 			prCreation: "immediate",
 		});
 	});

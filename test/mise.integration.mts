@@ -143,7 +143,6 @@ for (const packageFile of [".github/workflows/ci.yml", "action.yml"]) {
 			groupSlug: "mise",
 			internalChecksFilter: "strict",
 			minimumReleaseAge: "1 day",
-			platformAutomerge: false,
 		});
 		if (packageFile === ".github/workflows/ci.yml") {
 			assert.equal(dependency.currentDigest, "a".repeat(64));
@@ -214,7 +213,6 @@ const makeBranch = async (releases: ReleaseFixture[]) => {
 	const [branch] = branches;
 	assert.partialDeepStrictEqual(branch, {
 		branchName: "renovate/mise",
-		platformAutomerge: false,
 		prCreation: "immediate",
 	});
 	assert.equal((await computeInternalChecksStatus(branch)).stabilityStatus, "green");
