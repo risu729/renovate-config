@@ -60,8 +60,8 @@ test("dependencies use strict filtering and Renovate's default platform automerg
 		internalChecksFilter: "strict",
 		prCreation: "immediate",
 	});
-	// Strict filtering only raises matured releases, so GitHub-native automerge
-	// Cannot skip the release cooldown. Keep Renovate's default (true).
+	// Keep Renovate's default (true). Strict filtering only raises matured releases,
+	// So GitHub-native automerge cannot skip the release cooldown.
 	expect(config).not.toHaveProperty("platformAutomerge");
 	for (const rule of config.packageRules) {
 		if (rule.groupName === "mise") {
