@@ -39,28 +39,31 @@ const inherited: Config = mergeChildConfig(
 const effective: Config = mergeChildConfig(inherited, ownOptions);
 const inheritedRules = (inherited["packageRules"] ?? []) as Config[];
 
+// Update types (such as lockFileMaintenance) and managers apply before packageRules.
+// A rule may then need to restore the top-level value.
+const nestedConfigs = Object.values(effective).filter(
+	(value): value is Config => typeof value === "object" && value !== null && !Array.isArray(value),
+);
+
 test("top-level options differ from Renovate's defaults and extended presets", () => {
-	for (const [key, value] of Object.entries(ownOptions)) {
-		assert.ok(
-			!isDeepStrictEqual(value, inherited[key]),
-			`${key} repeats the inherited value ${JSON.stringify(inherited[key])}`,
-		);
-	}
+	const repeated = Object.entries(ownOptions)
+		.filter(([key, value]) => isDeepStrictEqual(value, inherited[key]))
+		.map(([key, value]) => `${key}: ${JSON.stringify(value)}`);
+	assert.deepEqual(repeated, []);
 });
 
 test("package rule options differ from the value Renovate would use anyway", () => {
-	for (const rule of ownRules) {
-		const otherRules = [...inheritedRules, ...ownRules.filter((other) => other !== rule)];
-		const options = Object.entries(rule).filter(
-			([key]) => key !== "description" && !key.startsWith("match"),
-		);
-		for (const [key, value] of options) {
-			// Another rule setting the same option can make an equal value meaningful.
-			const contested = otherRules.some((other) => Object.hasOwn(other, key));
-			assert.ok(
-				contested || !isDeepStrictEqual(value, effective[key]),
-				`${key} in ${JSON.stringify(rule)} repeats the top-level value ${JSON.stringify(effective[key])}`,
-			);
-		}
-	}
+	const repeated = ownRules.flatMap((rule, index) => {
+		// Only an earlier rule or a nested config can change the value a rule restores.
+		const earlier = [...inheritedRules, ...ownRules.slice(0, index), ...nestedConfigs];
+		return Object.entries(rule)
+			.filter(([key]) => key !== "description" && !key.startsWith("match"))
+			.filter(
+				([key, value]) =>
+					isDeepStrictEqual(value, effective[key]) &&
+					!earlier.some((other) => Object.hasOwn(other, key)),
+			)
+			.map(([key, value]) => `packageRules[${index}].${key}: ${JSON.stringify(value)}`);
+	});
+	assert.deepEqual(repeated, []);
 });

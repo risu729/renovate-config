@@ -114,7 +114,9 @@ comment what it overrides.
 [`test/redundant-options.integration.mts`](test/redundant-options.integration.mts)
 fails when a top-level preset option equals the value from Renovate's defaults
 and the extended presets, or when a `packageRules` option equals the resolved
-top-level value and no other rule sets that option.
+top-level value and no earlier rule, update type or manager config sets that
+option. It does not compare matchers, so an unrelated earlier rule that sets the
+same option hides a repeated value; check those by hand.
 
 ## Design Decisions
 
