@@ -28,9 +28,6 @@
 	// ref: https://docs.renovatebot.com/configuration-options/#internalchecksfilter
 	internalChecksFilter: "strict",
 	prCreation: "immediate",
-	// Renovate must enforce its age check even when it is not a required check
-	// in the hosting platform's branch protection rules.
-	platformAutomerge: false,
 	labels: [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}",

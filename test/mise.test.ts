@@ -47,9 +47,9 @@ test("mise grouping uses strict release filtering while retaining the release co
 	expect(group).not.toHaveProperty("prCreation");
 	expect(config).toMatchObject({
 		internalChecksFilter: "strict",
-		platformAutomerge: false,
 		prCreation: "immediate",
 	});
+	expect(config).not.toHaveProperty("platformAutomerge");
 });
 
 test("mise grouping preserves datasource lookup and Docker digest pinning", () => {

@@ -17,7 +17,6 @@
 	"minimumReleaseAgeBehaviour": "timestamp-optional",
 	"internalChecksFilter": "strict",
 	"prCreation": "immediate",
-	"platformAutomerge": false,
 	"labels": [
 		"dependencies",
 		"{{#unless (or (equals manager 'regex') (equals manager 'jsonata'))}}{{manager}}{{/unless}}"
