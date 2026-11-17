@@ -15,7 +15,7 @@ source text, and data whose exact wording is required for correctness.
 ## Development
 
 `mise install` installs the pinned tools, and mise installs Bun dependencies
-automatically (`[deps.bun]` in [`mise.toml`](mise.toml)). Outside CI, the
+automatically (see [Dependencies](#dependencies)). Outside CI, the
 postinstall hook also runs `hk install --mise`, which installs the git hooks.
 
 | Task                       | Command                 |
@@ -38,6 +38,24 @@ read the Renovate source at the new version to see what changed. This
 repository's own Renovate configuration extends the preset from the default
 branch (`github>risu729/renovate-config`), so a preset change applies here as
 soon as it merges.
+
+### Dependencies
+
+Only the mise deps provider `[deps.bun]` in [`mise.toml`](mise.toml) installs
+the npm dependencies. With `auto = true`, `mise run` and `mise exec` run
+`bun install --frozen-lockfile` first and skip it while `bun.lock` and
+`package.json` are unchanged and `node_modules` exists. This covers CI and the
+git hooks, which `hk install --mise` runs through `mise x`.
+
+- Keep the built-in provider and set only what differs from its defaults. Here
+  that is `auto` and the frozen `run`; the default sources and outputs already
+  match this repository.
+- Do not add an install task, an install command inside a task, or a CI step
+  such as `mise deps` or `bun install` before `mise run`. Run `mise deps`
+  explicitly only before a step that needs `node_modules` without going through
+  mise, or before a step that runs with `--no-deps`.
+- `[deps]` is experimental in mise, so `experimental = true` stays in
+  `[settings]` while the repository uses it.
 
 ## Releases
 
