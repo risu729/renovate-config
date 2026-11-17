@@ -42,8 +42,8 @@ soon as it merges.
 ### Dependencies
 
 Only the mise deps provider `[deps.bun]` in [`mise.toml`](mise.toml) installs
-the `package.json` dependencies. With `auto = true`, `mise run` and `mise exec` run
-`bun install --frozen-lockfile` first and skip it while `bun.lock` and
+the `package.json` dependencies. With `auto = true`, `mise run` and `mise exec`
+run `bun install --frozen-lockfile` first and skip it while `bun.lock` and
 `package.json` are unchanged and `node_modules` exists. This covers CI and the
 git hooks, which `hk install --mise` runs through `mise x`.
 
