@@ -102,9 +102,9 @@ backend = "npm:renovate"
 specifiers = ["44.241.0"]
 
 [[tools."npm:semantic-release"]]
-version = "25.0.9"
+version = "26.0.1"
 backend = "npm:semantic-release"
-specifiers = ["25.0.9"]
+specifiers = ["26.0.1"]
 
 [[tools."npm:typescript"]]
 version = "7.0.2"
