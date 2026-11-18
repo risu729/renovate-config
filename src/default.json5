@@ -234,6 +234,20 @@
 			groupName: "cargo-dist",
 		},
 		{
+			// cf refuses to build when wrangler or @cloudflare/vite-plugin is older than it
+			// supports (cf 1.0.0-rc.0 needs wrangler >=4.163.0 and @cloudflare/vite-plugin
+			// >=2.0.0-rc.0), and @cloudflare/vitest-plugin pins exact wrangler and miniflare
+			// versions. Separate PRs for these packages fail until the others land.
+			matchDepNames: [
+				"cf",
+				"wrangler",
+				"miniflare",
+				"@cloudflare/vite-plugin",
+				"@cloudflare/vitest-plugin",
+			],
+			groupName: "cloudflare",
+		},
+		{
 			matchDepNames: ["hk"],
 			groupName: "hk",
 		},

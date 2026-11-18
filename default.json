@@ -216,6 +216,16 @@
 		},
 		{
 			"matchDepNames": [
+				"cf",
+				"wrangler",
+				"miniflare",
+				"@cloudflare/vite-plugin",
+				"@cloudflare/vitest-plugin"
+			],
+			"groupName": "cloudflare"
+		},
+		{
+			"matchDepNames": [
 				"hk"
 			],
 			"groupName": "hk"
