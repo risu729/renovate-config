@@ -131,3 +131,13 @@ export default { worker: { "compatibilityDate":\n\t"2026-09-27" } };`;
 /*\n compatibilityDate: "2026-09-27",\n*/
 export default { worker: { "compatibilityDate":\n\t"2026-09-28" } };`);
 });
+
+const group = config.packageRules.find((rule) => rule.groupName === "cloudflare");
+
+test.each(["cf", "wrangler", "miniflare", "@cloudflare/vite-plugin", "@cloudflare/vitest-plugin"])(
+	"Cloudflare toolchain updates share a group: %s",
+	(depName) => {
+		expect(group).toBeDefined();
+		expect(group?.matchDepNames).toContain(depName);
+	},
+);
